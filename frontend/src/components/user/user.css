@@ -1,0 +1,12 @@
+.UserTitle {
+    height: 10px;
+}
+
+.UserTitle-status {
+    font-size: 15px;
+    text-align: right;
+}
+
+.UserTitle-name {
+    font-size: 20px;
+}

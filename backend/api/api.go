@@ -1,0 +1,79 @@
+package api
+
+import (
+	"dblib/controllers"
+	"log"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+type ApiInterface struct {
+	App *fiber.App
+}
+
+func (api *ApiInterface) InitApp() {
+	api.App = fiber.New(fiber.Config{})
+	// User
+	api.App.Get("/api/user/", controllers.GetAllUsers)
+	api.App.Get("/api/user/:id", controllers.GetUser)
+	api.App.Post("/api/user/", controllers.CreateUser)
+	api.App.Put("/api/user/:id", controllers.UpdateUser)
+	api.App.Delete("/api/user/:id", controllers.DeleteUser)
+	// Base
+	api.App.Get("/api/base/", controllers.GetAllBases)
+	api.App.Get("/api/base/:id", controllers.GetBase)
+	api.App.Post("/api/base/", controllers.CreateBase)
+	api.App.Put("/api/base/:id", controllers.UpdateBase)
+	api.App.Delete("/api/base/:id", controllers.DeleteBase)
+	// Employee
+	api.App.Get("/api/employee/", controllers.GetAllEmployees)
+	api.App.Get("/api/employee/:id", controllers.GetEmployee)
+	api.App.Post("/api/employee/", controllers.CreateEmployee)
+	api.App.Put("/api/employee/:id", controllers.UpdateEmployee)
+	api.App.Delete("/api/employee/:id", controllers.DeleteEmployee)
+	// Nomenclature
+	api.App.Get("/api/nomenclature/", controllers.GetAllNomenclatures)
+	api.App.Get("/api/nomenclature/:id", controllers.GetNomenclature)
+	api.App.Post("/api/nomenclature/", controllers.CreateNomenclature)
+	api.App.Put("/api/nomenclature/:id", controllers.UpdateNomenclature)
+	api.App.Delete("/api/nomenclature/:id", controllers.DeleteNomenclature)
+	// Nomenclature Type
+	api.App.Get("/api/nomenclature_type/", controllers.GetAllNomenclatureTypes)
+	api.App.Get("/api/nomenclature_type/:id", controllers.GetNomenclatureType)
+	api.App.Post("/api/nomenclature_type/", controllers.CreateNomenclatureType)
+	api.App.Put("/api/nomenclature_type/:id", controllers.UpdateNomenclatureType)
+	api.App.Delete("/api/nomenclature_type/:id", controllers.DeleteNomenclatureType)
+	// Payment
+	api.App.Get("/api/payment/", controllers.GetAllPayments)
+	api.App.Get("/api/payment/:id", controllers.GetPayment)
+	api.App.Post("/api/payment/", controllers.CreatePayment)
+	api.App.Put("/api/payment/:id", controllers.UpdatePayment)
+	api.App.Delete("/api/payment/:id", controllers.DeletePayment)
+	// Rent
+	api.App.Get("/api/rent/", controllers.GetAllRents)
+	api.App.Get("/api/rent/:id", controllers.GetRent)
+	api.App.Post("/api/rent/", controllers.CreateRent)
+	api.App.Put("/api/rent/:id", controllers.UpdateRent)
+	api.App.Delete("/api/rent/:id", controllers.DeleteRent)
+	// Status
+	api.App.Get("/api/status/", controllers.GetAllStatuses)
+	api.App.Get("/api/rent/:id", controllers.GetStatus)
+	api.App.Post("/api/rent/", controllers.CreateStatus)
+	api.App.Put("/api/rent/:id", controllers.UpdateStatus)
+	api.App.Delete("/api/rent/:id", controllers.DeleteStatus)
+	// Position
+	api.App.Get("/api/position/", controllers.GetAllPositions)
+	api.App.Get("/api/position/:id", controllers.GetPosition)
+	api.App.Post("/api/position/", controllers.CreatePosition)
+	api.App.Put("/api/position/:id", controllers.UpdatePosition)
+	api.App.Delete("/api/position/:id", controllers.DeletePosition)
+
+}
+
+func (api *ApiInterface) Index(ctx *fiber.Ctx) {
+
+}
+
+func (api *ApiInterface) Run(_port string) {
+	log.Fatal(api.App.Listen(_port))
+}
