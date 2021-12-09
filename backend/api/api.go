@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type ApiInterface struct {
@@ -13,6 +14,9 @@ type ApiInterface struct {
 
 func (api *ApiInterface) InitApp() {
 	api.App = fiber.New(fiber.Config{})
+	api.App.Use(cors.New(cors.Config{
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 	// User
 	api.App.Get("/api/user/", controllers.GetAllUsers)
 	api.App.Get("/api/user/:id", controllers.GetUser)
@@ -67,7 +71,12 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/position/", controllers.CreatePosition)
 	api.App.Put("/api/position/:id", controllers.UpdatePosition)
 	api.App.Delete("/api/position/:id", controllers.DeletePosition)
-
+	// Price
+	api.App.Get("/api/price/", controllers.GetAllPrices)
+	api.App.Get("/api/price/:id", controllers.GetPrice)
+	api.App.Post("/api/price/", controllers.CreatePrice)
+	api.App.Put("/api/price/:id", controllers.UpdatePrice)
+	api.App.Delete("/api/price/:id", controllers.DeletePrice)
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {

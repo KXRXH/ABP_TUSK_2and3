@@ -9,7 +9,11 @@ type Item struct {
 
 type Status Item
 type Position Item
-type NomenclatureType Item
+type NomenclatureType struct {
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	Price Price  `gorm:"foreignKey:ID"`
+}
 
 type User struct {
 	ID       int    `json:"id"`
@@ -70,4 +74,10 @@ type Rent struct {
 	Base    Base         `gorm:"foreignKey:ID"`
 	Product Nomenclature `gorm:"foreignKey:ID"`
 	IsStart bool         `json:"is_start"` // is it rent start or rent finished?
+}
+
+type Price struct {
+	ID    int       `json:"id"`
+	Time  time.Time `json:"time"`
+	Value int       `json:"value"`
 }

@@ -8,11 +8,8 @@
 }
 
 .App-header {
-  background-color: #0084ff;
-  padding: 10px;
   display: flex;
   justify-content: space-between;
-  color: white;
 }
 
 .App-flex-btw {

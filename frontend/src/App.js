@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Header} from './components/Header.js'
+import {Note} from './components/note/Note.js'
+import {Table} from 'react-bootstrap'
 
 const {app} = window.require('electron').remote;
 
@@ -17,7 +18,7 @@ class App extends Component {
 			<div className="App">
 				<Header title="ООО КОТЭ" userName="Иванов Иван Иванович" status="Admin"/>
 				<body>
-
+					<Note actionIndex={0}></Note>
 				</body>
 			</div>
 		);
