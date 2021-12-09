@@ -57,10 +57,10 @@ func (api *ApiInterface) InitApp() {
 	api.App.Delete("/api/rent/:id", controllers.DeleteRent)
 	// Status
 	api.App.Get("/api/status/", controllers.GetAllStatuses)
-	api.App.Get("/api/rent/:id", controllers.GetStatus)
-	api.App.Post("/api/rent/", controllers.CreateStatus)
-	api.App.Put("/api/rent/:id", controllers.UpdateStatus)
-	api.App.Delete("/api/rent/:id", controllers.DeleteStatus)
+	api.App.Get("/api/status/:id", controllers.GetStatus)
+	api.App.Post("/api/status/", controllers.CreateStatus)
+	api.App.Put("/api/status/:id", controllers.UpdateStatus)
+	api.App.Delete("/api/status/:id", controllers.DeleteStatus)
 	// Position
 	api.App.Get("/api/position/", controllers.GetAllPositions)
 	api.App.Get("/api/position/:id", controllers.GetPosition)

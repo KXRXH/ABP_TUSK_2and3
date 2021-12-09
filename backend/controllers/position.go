@@ -8,7 +8,7 @@ import (
 )
 
 func CreatePosition(ctx *fiber.Ctx) error {
-	model := db.Status{}
+	model := db.Position{}
 	err := ctx.BodyParser(&model)
 	if err != nil {
 		ctx.Status(http.StatusUnprocessableEntity).JSON(
@@ -37,7 +37,7 @@ func UpdatePosition(context *fiber.Ctx) error {
 		return nil
 	}
 
-	model := db.Status{}
+	model := db.Position{}
 
 	err := context.BodyParser(&model)
 	if err != nil {
@@ -69,7 +69,7 @@ func DeletePosition(context *fiber.Ctx) error {
 		return nil
 	}
 
-	model := db.Status{}
+	model := db.Position{}
 
 	err := db.DB.Delete(model, id)
 
@@ -87,7 +87,7 @@ func DeletePosition(context *fiber.Ctx) error {
 }
 
 func GetAllPositions(context *fiber.Ctx) error {
-	models := &[]db.Status{}
+	models := &[]db.Position{}
 	err := db.DB.Find(models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
@@ -105,7 +105,7 @@ func GetAllPositions(context *fiber.Ctx) error {
 
 func GetPosition(context *fiber.Ctx) error {
 	id := context.Params("id")
-	model := &db.Status{}
+	model := &db.Position{}
 	if id == "" {
 		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 			"message": "id cannot be empty",
