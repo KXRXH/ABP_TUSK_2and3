@@ -6,7 +6,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	jwtware "github.com/gofiber/jwt/v3"
 )
 
 type ApiInterface struct {
@@ -17,10 +16,6 @@ func (api *ApiInterface) InitApp() {
 	api.App = fiber.New(fiber.Config{})
 	api.App.Use(cors.New(cors.Config{
 		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
-	// JWT Middleware
-	api.App.Use(jwtware.New(jwtware.Config{
-		SigningKey: []byte("КОТЭ"),
 	}))
 	// User
 	api.App.Get("/api/user/", controllers.GetAllUsers)
