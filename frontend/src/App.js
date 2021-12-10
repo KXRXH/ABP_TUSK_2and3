@@ -11,14 +11,21 @@ class App extends Component {
 		super(props)
 		this.state = {
 			currentTab: "users",
+			actionIndex: 0,
 		}
+		this.callNote = this.callNote.bind(this);
+	}
+	callNote(paragraph) {
+		this.setState({
+			actionIndex: paragraph,
+		})
 	}
 	render() {
 		return (
 			<div className="App">
-				<Header title="ООО КОТЭ" userName="Иванов Иван Иванович" status="Admin"/>
+				<Header title="ООО КОТЭ" callNote={this.callNote} userName="Иванов Иван Иванович" status="Admin"/>
 				<body>
-					<Note actionIndex={0}></Note>
+					<Note actionIndex={this.state.actionIndex}/>
 				</body>
 			</div>
 		);

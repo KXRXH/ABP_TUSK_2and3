@@ -12,7 +12,6 @@ type Position Item
 type NomenclatureType struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
-	Price Price  `gorm:"foreignKey:ID"`
 }
 
 type User struct {
@@ -64,7 +63,7 @@ type Base struct {
 	Index   string `json:"index"` // post index
 	Coords  string `json:"coords"`
 	Name    string `json:"name"`
-	Number  int    `json:"num"`
+	Number  string `json:"number"`
 }
 
 type Rent struct {
@@ -77,7 +76,8 @@ type Rent struct {
 }
 
 type Price struct {
-	ID    int       `json:"id"`
-	Time  time.Time `json:"time"`
-	Value int       `json:"value"`
+	ID               int              `json:"id"`
+	Time             time.Time        `json:"time"`
+	Value            int              `json:"value"`
+	NomenclatureType NomenclatureType `gorm:"foreignKey:ID"`
 }

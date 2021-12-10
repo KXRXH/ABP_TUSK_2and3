@@ -16,12 +16,9 @@ const Header = props => {
                     navbarScroll
                 >
                     <NavDropdown title="Справочная" id="navbarScrollingDropdown">
-                    <NavDropdown.Item href="#action3">Номенклатура</NavDropdown.Item>
-                    <NavDropdown.Item href="#action4"></NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action5">
-                        Something else here
-                    </NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(0)}>Номенклатура</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(1)}>Тарифы</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(2)}>Станции Аренды</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#" disabled>
                     Link
