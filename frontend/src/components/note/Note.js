@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import { Table } from 'react-bootstrap';
+import {API_ADDRESS} from '../../constants.js'
 
 
 const getDate = (date_string) => {
@@ -7,7 +8,6 @@ const getDate = (date_string) => {
     return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'});
 }
 
-const API_ADDRESS = "http://localhost:3001/api/"
 const request_path = {
     0: {
         url: API_ADDRESS + "nomenclature", 
@@ -73,7 +73,7 @@ export class Note extends Component {
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td>
 				<td>{row.name}</td>
-				<td>{row.Type.title}</td>
+				<td>{row.Type ? row.title : ""}</td>
 				<td>{row.used ? "Да" : "Нет"}</td>
 				<td>{getDate(row.start)}</td>
 				<td>{getDate(row.finish)}</td>
