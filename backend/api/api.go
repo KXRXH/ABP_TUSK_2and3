@@ -6,7 +6,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	jwtware "github.com/gofiber/jwt/v3"
 )
 
 type ApiInterface struct {
@@ -81,9 +80,6 @@ func (api *ApiInterface) InitApp() {
 	api.App.Delete("/api/price/:id", controllers.DeletePrice)
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
-	api.App.Use(jwtware.New(jwtware.Config{
-		SigningKey: []byte("КОТЭ"),
-	}))
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {
