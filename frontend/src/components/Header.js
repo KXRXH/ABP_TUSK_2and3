@@ -5,9 +5,8 @@ import {UserTitle} from './user/UserTitle.js'
 const Header = props => {
     //
     return (
-        <Navbar bg="light" expand="lg">
-            <Container>
-                <Navbar.Brand>{props.title}</Navbar.Brand>
+        <Navbar bg="light" expand="sm">
+            <Container className="menu">
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                 <Nav
@@ -18,7 +17,8 @@ const Header = props => {
                     <NavDropdown title="Справочная" id="navbarScrollingDropdown">
                         <NavDropdown.Item onClick={() => props.callNote(0)}>Номенклатура</NavDropdown.Item>
                         <NavDropdown.Item onClick={() => props.callNote(1)}>Тарифы</NavDropdown.Item>
-                        <NavDropdown.Item onClick={() => props.callNote(2)}>Станции Аренды</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(2)}>Пользователи</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(3)}>Станции Аренды</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#" disabled>
                     Link

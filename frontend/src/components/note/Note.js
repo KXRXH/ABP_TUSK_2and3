@@ -4,15 +4,10 @@ import { Table } from 'react-bootstrap';
 
 const getDate = (date_string) => {
     let date = new Date(date_string);
-    return date.toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+    return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'});
 }
 
 const API_ADDRESS = "http://localhost:3001/api/"
-
 const request_path = {
     0: {
         url: API_ADDRESS + "nomenclature", 
@@ -28,6 +23,12 @@ const request_path = {
         ]
     },
     2: {
+        url: API_ADDRESS + "user",
+        titles: [
+            "Фамилия", "Имя", "Отчество", "Телефон", "Эл. почта", "дата рождения", "статус"
+        ]
+    },
+    3: {
         url: API_ADDRESS + "base",
         titles: [
             "Номер", "Наименование", "Адрес", "Индекс", "Координата широта", "Координата долгота"
@@ -68,7 +69,7 @@ export class Note extends Component {
         )
     }
 	getTable() {
-		if (this.props.actionIndex == 0)
+		if (this.props.actionIndex === 0)
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td>
 				<td>{row.name}</td>
@@ -77,14 +78,25 @@ export class Note extends Component {
 				<td>{getDate(row.start)}</td>
 				<td>{getDate(row.finish)}</td>
 			</tr>)
-		if (this.props.actionIndex == 1) {
+		if (this.props.actionIndex === 1) {
 			return this.state.data.map(row => <tr>
                 <td>{row.time}</td>
                 <td>{row.NomenclatureType.title}</td>
                 <td>{row.value}</td>
             </tr>)
 		}
-		if (this.props.actionIndex == 2) {
+        if (this.props.actionIndex === 2) {
+            return this.state.data.map(row => <tr>
+                <td>{row.surname}</td>
+                <td>{row.name}</td>
+                <td>{row.lastname}</td>
+                <td>{row.phone}</td>
+                <td>{row.mail}</td>
+                <td>{row.date}</td>
+                <td>{row.Status.title}</td>
+            </tr>)
+        }
+		if (this.props.actionIndex === 3) {
 			return this.state.data.map(row => <tr>
 				<td>{row.number}</td>
 				<td>{row.name}</td>
