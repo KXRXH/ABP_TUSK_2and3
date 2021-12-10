@@ -32,9 +32,8 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	claims := jwt.MapClaims{
-		"Id":    strconv.Itoa(int(employee.ID)),
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
-		"admin": true,
+		"Id":  strconv.Itoa(int(employee.ID)),
+		"exp": time.Now().Add(time.Hour * 72).Unix(),
 	}
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := t.SignedString([]byte("КОТЭ"))
@@ -44,6 +43,5 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "login success",
 		"token":   token,
-		"userId":  employee.ID,
 	})
 }
