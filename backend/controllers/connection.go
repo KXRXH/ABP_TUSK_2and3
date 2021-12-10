@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"dblib/db"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -15,6 +16,7 @@ func Login(c *fiber.Ctx) error {
 	var data map[string]string
 
 	if err := c.BodyParser(&data); err != nil {
+		fmt.Println(data)
 		return err
 	}
 
