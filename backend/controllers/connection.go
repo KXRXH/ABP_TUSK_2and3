@@ -23,20 +23,21 @@ func Login(c *fiber.Ctx) error {
 	db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"]).First(&employee)
 
 	if employee.ID == 0 {
-		c.Status(fiber.StatusInternalServerError)
+		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
 			"message": "incorrect login or password",
 			"token":   "-1",
 		})
 	}
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer:    strconv.Itoa(int(employee.ID)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-	})
-	token, err := claims.SignedString([]byte(SecureKey))
+	claims := jwt.MapClaims{
+		"Id":    strconv.Itoa(int(employee.ID)),
+		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+		"admin": true,
+	}
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := t.SignedString([]byte("КОТЭ"))
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
-		return c.JSON(fiber.Map{"message": "login issue"})
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	return c.JSON(fiber.Map{
 		"message": "login success",
