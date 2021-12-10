@@ -77,6 +77,8 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/price/", controllers.CreatePrice)
 	api.App.Put("/api/price/:id", controllers.UpdatePrice)
 	api.App.Delete("/api/price/:id", controllers.DeletePrice)
+	// Login
+	api.App.Post("/api/login", controllers.Login)
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {
