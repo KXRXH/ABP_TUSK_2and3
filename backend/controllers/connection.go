@@ -23,7 +23,7 @@ func Login(c *fiber.Ctx) error {
 	db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"]).First(&employee)
 
 	if employee.ID == 0 {
-		c.Status(fiber.StatusInternalServerError)
+		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
 			"message": "incorrect login or password",
 			"token":   "-1",
@@ -35,7 +35,7 @@ func Login(c *fiber.Ctx) error {
 	})
 	token, err := claims.SignedString([]byte(SecureKey))
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
+		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{"message": "login issue"})
 	}
 	return c.JSON(fiber.Map{
