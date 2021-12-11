@@ -113,7 +113,7 @@ func GetNomenclature(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("Type").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})
@@ -136,7 +136,7 @@ func GetLastNomenclature(context *fiber.Ctx) error {
 		return err
 	}
 	context.Status(http.StatusOK).JSON(&fiber.Map{
-		"message": "users gotten successfully",
+		"message": "id gotten successfully",
 		"id":      model.ID,
 	})
 	return nil

@@ -104,16 +104,14 @@ func GetAllEmployees(context *fiber.Ctx) error {
 
 func GetEmployee(context *fiber.Ctx) error {
 	id := context.Params("id")
-	model := &db.Employee{}
+	var model db.Employee
 	if id == "" {
 		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 			"message": "id cannot be empty",
 		})
 		return nil
 	}
-
-	err := db.DB.Where("id = ?", id).First(model).Error
-	if err != nil {
+	if err := db.DB.Preload("Position").Where("id = ?", id).First(&model).Error; err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})
 		return err

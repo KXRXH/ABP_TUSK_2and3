@@ -113,7 +113,7 @@ func GetUser(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("Status").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})
