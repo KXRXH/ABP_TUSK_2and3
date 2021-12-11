@@ -20,9 +20,11 @@ func Login(c *fiber.Ctx) error {
 	if employee.ID == 0 {
 		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
-			"message": "no",
+			"message": false,
 		})
 	}
+	// ПОДТЯГИВАЕМ ЗНАЧЕНИЯ ИЗ 2 positions
+	db.DB.Joins("Position", db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"])).First(&employee)
 	// ТУТ ВОЗВРАТ ЗАПРОСА
 	claim := jwt.MapClaims{
 		"ID":           employee.ID,
@@ -33,7 +35,7 @@ func Login(c *fiber.Ctx) error {
 		"Lastname":     employee.Lastname,
 	}
 	return c.JSON(fiber.Map{
-		"message": "ok",
+		"message": true,
 		"user":    claim,
 	})
 }

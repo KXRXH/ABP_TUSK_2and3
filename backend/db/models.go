@@ -1,6 +1,10 @@
 package db
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Item struct {
 	ID    int    `json:"id"`
@@ -26,6 +30,7 @@ type User struct {
 }
 
 type Employee struct {
+	gorm.Model
 	ID       int      `json:"id"`
 	Name     string   `json:"name"`
 	Surname  string   `json:"surname"`
