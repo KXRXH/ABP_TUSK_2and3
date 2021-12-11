@@ -10,4 +10,5 @@ func main() {
 	api := api.ApiInterface{}
 	api.InitApp()
 	api.Run(":3001")
+
 }

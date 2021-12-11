@@ -88,7 +88,7 @@ func DeleteEmployee(context *fiber.Ctx) error {
 
 func GetAllEmployees(context *fiber.Ctx) error {
 	models := &[]db.Employee{}
-	err := db.DB.Joins("Employees").Joins("Position").Find(models).Error
+	err := db.DB.Joins("Employee").Joins("Position").Find(models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
