@@ -72,7 +72,6 @@ func DeleteEmployee(context *fiber.Ctx) error {
 	model := db.Employee{}
 
 	err := db.DB.Delete(model, id)
-
 	if err.Error != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "could not delete nomenclature",
