@@ -3,45 +3,37 @@ package controllers
 import (
 	"dblib/db"
 	"fmt"
-	"strconv"
-	"time"
-	"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
-)
 
-var SecureKey string = "КОТЭ"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
+)
 
 func Login(c *fiber.Ctx) error {
 	var data map[string]string
-
 	if err := c.BodyParser(&data); err != nil {
 		fmt.Println(data)
 		return err
 	}
-
 	var employee db.Employee
-
+	// ПРОВЕРКА ЛОГИНА И ПАРОЛЯ
 	db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"]).First(&employee)
-
 	if employee.ID == 0 {
 		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
-			"message": "incorrect login or password",
-			"token":   "-1",
+			"message": "no",
 		})
 	}
-	claims := jwt.MapClaims{
-		"Id":  strconv.Itoa(int(employee.ID)),
-		"exp": time.Now().Add(time.Hour * 72).Unix(),
-	}
-	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := t.SignedString([]byte("КОТЭ"))
-	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
+	// ТУТ ВОЗВРАТ ЗАПРОСА
+	claim := jwt.MapClaims{
+		"ID":           employee.ID,
+		"PositionId":   employee.Position.ID,
+		"PositionName": employee.Position.Title,
+		"Name":         employee.Name,
+		"Surname":      employee.Surname,
+		"Lastname":     employee.Lastname,
 	}
 	return c.JSON(fiber.Map{
-		"message": "login success",
-		"token":   token,
+		"message": "ok",
+		"user":    claim,
 	})
 }
