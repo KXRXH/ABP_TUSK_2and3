@@ -21,17 +21,16 @@ export class Login extends Component {
 			})
 		}).then(response => response.json()).then(
 			result => {
-                let tok = result.token;
-                console.log(result)
-                if (tok === "-1") {
-                    this.props.setEmployeeToken(null);
+                // Check success login
+                if (result.message !== "ok") {
+                    this.props.setEmployee(null);
                     this.setState({error: true});
                     alert("Ошибка доступа!")
                     return;
                 }
-                this.props.setEmployeeToken(result.token)
+                this.props.setEmployee(result.user)
             },
-			error => {this.props.setEmployeeToken(null); this.setState({error: true})}
+			error => {this.props.setEmployee(null); this.setState({error: true})}
 		)
     }
     render(){
@@ -40,25 +39,17 @@ export class Login extends Component {
                 <Card.Header as="h5">
                     ООО "КОТЭ"
                 </Card.Header>
-                <Card.Body>
                 <Form onSubmit={this.handleSubmit}>
-                    <Row>
-                        <Col>
+                <Card.Body>
+                    <Row className="mb-3">
                             <Form.Control placeholder="E-Mail сотрудника" type="email" name="mail"/>
-                        </Col>
                     </Row>
-                    <Row>
-                        <Col>
+                    <Row className="mb-1">
                             <Form.Control placeholder="Пароль" type="password" name="password"/>
-                        </Col>
                     </Row>
-                    <Row>
-                        <Col>
-                            <Button type="submit" className="mb-2" variant="primary">Войти</Button>
-                        </Col>
-                    </Row>
-                </Form>
                 </Card.Body>
+                <Button type="submit" variant="primary">Войти</Button>
+                </Form>
             </Card>
         )
     }

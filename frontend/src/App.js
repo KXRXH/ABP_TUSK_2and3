@@ -11,7 +11,8 @@ class App extends Component {
 		super(props)
 		this.state = {
 			currentTab: "users",
-			userToken: null,
+			employee: null,
+			ePos: 100,
 			actionIndex: 0,
 		}
 		this.callNote = this.callNote.bind(this);
@@ -23,12 +24,13 @@ class App extends Component {
 	}
 	render() {
 		console.log(this.state.userToken)
-		const bodyContent = (this.state.userToken === null) ? 
-			<Login setEmployeeToken={token => this.setState({userToken: token})}/> : 
+		const bodyContent = (this.state.employee === null) ? 
+			<Login setEmployee={u => this.setState({employee: u, ePos: u ? u.PositionId : null})}/> : 
 			<Note actionIndex={this.state.actionIndex}/>
 		return (
 			<div className="App">
-				<Header title="ООО КОТЭ" callNote={this.callNote} userName="Иванов Иван Иванович" status="Admin"/>
+				<Header position={this.state.ePos} 
+					title="ООО КОТЭ" callNote={this.callNote} userName="Иванов Иван Иванович" status="Admin"/>
 				<body>
 					{bodyContent}
 				</body>

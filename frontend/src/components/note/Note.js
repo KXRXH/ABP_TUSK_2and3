@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Table } from 'react-bootstrap';
 import {API_ADDRESS} from '../../constants.js'
+import { NewNomenclature } from '../forms/NewNomenclature.js';
 
 
 const getDate = (date_string) => {
@@ -33,7 +34,7 @@ const request_path = {
         titles: [
             "Номер", "Наименование", "Адрес", "Индекс", "Координата широта", "Координата долгота"
         ]
-    }
+    },
 }
 
 export class Note extends Component {
@@ -50,6 +51,9 @@ export class Note extends Component {
     }
 
     componentDidUpdate() {
+        if (this.props.actionIndex > 3) {
+            return;
+        }
         fetch(request_path[this.props.actionIndex].url)
         .then(res => res.json())
         .then(
@@ -81,7 +85,7 @@ export class Note extends Component {
 		if (this.props.actionIndex === 1) {
 			return this.state.data.map(row => <tr>
                 <td>{row.time}</td>
-                <td>{row.NomenclatureType.title}</td>
+                <td>{row.NomenclatureType ? row.NomenclatureType.title : null}</td>
                 <td>{row.value}</td>
             </tr>)
 		}
@@ -93,7 +97,7 @@ export class Note extends Component {
                 <td>{row.phone}</td>
                 <td>{row.mail}</td>
                 <td>{row.date}</td>
-                <td>{row.Status.title}</td>
+                <td>{row.Status ? row.Status.title : null}</td>
             </tr>)
         }
 		if (this.props.actionIndex === 3) {
@@ -108,7 +112,11 @@ export class Note extends Component {
 		}
 	}
     render() {
-        return (
+        let renderContent;
+        if (this.props.actionIndex === 4) {
+            renderContent = <NewNomenclature />
+        } else {
+        renderContent = (
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -120,5 +128,7 @@ export class Note extends Component {
                 </tbody>
             </Table>
         );
+        }
+        return renderContent
     }
 }
