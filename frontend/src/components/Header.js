@@ -4,6 +4,7 @@ import {UserTitle} from './user/UserTitle.js'
 
 const Header = props => {
     //
+    console.log(props.position)
     return (
         <Navbar bg="light" expand="sm">
             <Container className="menu">
@@ -20,9 +21,13 @@ const Header = props => {
                         <NavDropdown.Item onClick={() => props.callNote(2)}>Пользователи</NavDropdown.Item>
                         <NavDropdown.Item onClick={() => props.callNote(3)}>Станции Аренды</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="#" disabled>
-                    Link
-                    </Nav.Link>
+                    {props.position < 2 ? <NavDropdown title="Эксплуатация товаров" id="navbarScrollingDropdown">
+                        <NavDropdown.Item onClick={() => props.callNote(4)}>Ввод в эксплуатацию</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(5)}>Вывод из эксплуатации</NavDropdown.Item>
+                    </NavDropdown> : null}
+                    <NavDropdown title="Прайс и аренда">
+
+                    </NavDropdown>
                     <UserTitle/>
                 </Nav>
                 </Navbar.Collapse>
