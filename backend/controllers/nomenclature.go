@@ -128,8 +128,8 @@ func GetNomenclature(context *fiber.Ctx) error {
 }
 
 func GetLastNomenclature(context *fiber.Ctx) error {
-	var model db.Nomenclature
-	err := db.DB.Order("id desc").Last(&model).Error
+	model := &db.Nomenclature{}
+	err := db.DB.Order("id desc").Last(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
