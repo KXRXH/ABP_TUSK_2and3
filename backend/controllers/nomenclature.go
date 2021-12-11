@@ -56,6 +56,7 @@ func UpdateNomenclature(context *fiber.Ctx) error {
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "book has been successfully updated",
+		"id":      id,
 	})
 	return nil
 }

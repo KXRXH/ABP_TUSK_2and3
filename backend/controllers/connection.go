@@ -25,7 +25,7 @@ func Login(c *fiber.Ctx) error {
 	}
 	// ПОДТЯГИВАЕМ ЗНАЧЕНИЯ ИЗ 2 positions
 	db.DB.Joins("Position", db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"])).First(&employee)
-	// ТУТ ВОЗВРАТ ЗАПРОСА
+	// ТУТ ФОРМИРОВАНИЕ ИНФОРМАЦИИ О USER'е
 	claim := jwt.MapClaims{
 		"ID":           employee.ID,
 		"PositionId":   employee.Position.ID,
