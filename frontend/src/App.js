@@ -49,7 +49,7 @@ class App extends Component {
 		})
 	}
 	changeAction(index) {
-		this.setState({actionIndex: index, isCreateNom: false, nomToChangeId: -1});
+		this.setState({actionIndex: index, isCreateNom: true, nomToChangeId: -1});
 	}
 	render() {
 		console.log(this.state.userToken)
