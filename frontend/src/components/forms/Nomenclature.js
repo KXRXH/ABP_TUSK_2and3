@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
-import {Button, Form, Row, Col, Card, Alert, InputGroup} from 'react-bootstrap'
+import {Button, Form, Row, Col, Card, InputGroup} from 'react-bootstrap'
 import {API_ADDRESS} from '../../constants.js'
 import './forms.css'
 
 
-export class NewNomenclature extends Component {
+export class Nomenclature extends Component {
     constructor(props) {
         super(props);
         let d = new Date();
         console.log(d.toISOString())
         this.state = {
             date: d.toISOString().split("T")[0],
-            number: "",
+            number: this.props.defaultId,
             code: "",
             name: "",
             type: "0",
             types: [],
-            typeId: -1,
+            typeId: 0,
         }
         this.handleCodeChange = this.handleCodeChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -41,13 +41,59 @@ export class NewNomenclature extends Component {
             }
         );
     }
+    getType(id) {
+        for (let k in this.state.types) {
+            if (k.id == id) {
+                return k.title;
+            }
+        }
+        return ""
+    }
     onSubmit() {
+        if (this.props.isCreate) {
+            console.log(JSON.stringify({
+                    "code": this.state.code,
+                    "name": this.state.name,
+                    "used": true,
+                    "Type": {
+                        "id": this.state.typeId -0,
+                        "title": this.getType(this.state.typeId - 0)
+                    }
+ 
+            }))
+            fetch(API_ADDRESS + "nomenclature", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "code": this.state.code,
+                    "name": this.state.name,
+                    "used": true,
+                    "Type": {
+                        "id": this.state.typeId - 0,
+                        "title": this.getType(this.state.typeId - 0)
+                    }
+                })
+            }).then(res => res.json()).then(r => console.log(r), e => console.log(e))
+        } else {
+            fetch(API_ADDRESS + "nomenclature", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+
+                })
+            }) 
+        }
+        this.props.onSubmit();
     }
     render() {
         return (
             <Card className="form">
                 <Card.Header as="h3">
-                    Ввод в эксплуатацию
+                    {this.props.isCreate ? "Ввод в эксплуатацию" : "Изменить товар"}
                 </Card.Header>
                 <Form>
                 <Card.Body>
@@ -73,11 +119,11 @@ export class NewNomenclature extends Component {
                         <Row className="mb-3">
                             <InputGroup>
                                 <InputGroup.Text>Тип товара</InputGroup.Text>
-                                <Form.Select onChange={e => this.setState({typeId: e.target.value})}>
+                                <Form.Control as="select" onChange={e => this.setState({typeId: e.target.value})}>
                                 {this.state.types.map(value => {
                                     return <option value={value.id}>{value.title}</option>
                                 })}
-                                </Form.Select>
+                                </Form.Control>
                             </InputGroup>
                          </Row>
                 </Card.Body>

@@ -1,41 +1,7 @@
 import React, {Component} from 'react'
-import { Table } from 'react-bootstrap';
-import {API_ADDRESS} from '../../constants.js'
-import { NewNomenclature } from '../forms/NewNomenclature.js';
-
-
-const getDate = (date_string) => {
-    let date = new Date(date_string);
-    return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'});
-}
-
-const request_path = {
-    0: {
-        url: API_ADDRESS + "nomenclature", 
-        titles: [
-            "Артикул", "Наименование", "Тип номенклатуры", 
-            "Используется", "Дата ввода в эксплуатацию", "Дата вывода из эксплуатации"
-        ]
-    },
-    1: {
-        url: API_ADDRESS + "price",
-        titles: [
-            "Дата последнего изменения", "Тип номенклатуры", "Тариф"
-        ]
-    },
-    2: {
-        url: API_ADDRESS + "user",
-        titles: [
-            "Фамилия", "Имя", "Отчество", "Телефон", "Эл. почта", "дата рождения", "статус"
-        ]
-    },
-    3: {
-        url: API_ADDRESS + "base",
-        titles: [
-            "Номер", "Наименование", "Адрес", "Индекс", "Координата широта", "Координата долгота"
-        ]
-    },
-}
+import { Button, Table } from 'react-bootstrap';
+import {API_ADDRESS, REQUEST_PATH, getDate} from '../../constants.js'
+import { Nomenclature } from '../forms/Nomenclature.js';
 
 export class Note extends Component {
     constructor(props) {
@@ -45,42 +11,52 @@ export class Note extends Component {
             error: null,
             isLoaded: false,
 			data: [],
-            url: request_path[props.actionIndex].url,
-            titles: request_path[props.actionIndex].titles,
+            url: REQUEST_PATH[props.actionIndex].url,
+            titles: REQUEST_PATH[props.actionIndex].titles,
         };
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
         if (this.props.actionIndex > 3) {
             return;
-        }
-        fetch(request_path[this.props.actionIndex].url)
+        } else {
+            console.log(this.props.actionIndex);
+        fetch(REQUEST_PATH[this.props.actionIndex].url)
         .then(res => res.json())
         .then(
             (result) => {
-            return this.setState({
-                isLoaded: true,
-                data: result.data,
-				titles: request_path[this.props.actionIndex].titles,
-            });
+                return this.setState({
+                    isLoaded: true,
+                    data: result.data,
+                    titles: REQUEST_PATH[this.props.actionIndex].titles,
+                });
             },
             (error) => {
-            this.setState({
-                isLoaded: true,
-                error
-            });
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
             }
         )
+        }
     }
 	getTable() {
-		if (this.props.actionIndex === 0)
+		if (this.props.actionIndex === 0) // Номенклатура
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td>
 				<td>{row.name}</td>
-				<td>{row.Type ? row.title : ""}</td>
+				<td>{row.Type ? row.Type.title : ""}</td>
 				<td>{row.used ? "Да" : "Нет"}</td>
 				<td>{getDate(row.start)}</td>
 				<td>{getDate(row.finish)}</td>
+                {this.props.position < 3 ? 
+                    <td><Button onClick={() => this.props.changeNomenclature(row.id)}>Изменить</Button></td> 
+                    : null
+                }
+                {this.props.position == 1 ? 
+                    <td><Button>Удалить</Button></td> 
+                    : null
+                }
 			</tr>)
 		if (this.props.actionIndex === 1) {
 			return this.state.data.map(row => <tr>
@@ -114,7 +90,11 @@ export class Note extends Component {
     render() {
         let renderContent;
         if (this.props.actionIndex === 4) {
-            renderContent = <NewNomenclature />
+            renderContent = <Nomenclature 
+                    onSubmit={() => this.props.changeAction(0)} 
+                    defaultId={this.props.nomToChangeId} 
+                    isCreate={this.props.isCreateNom}
+            />
         } else {
         renderContent = (
             <Table striped bordered hover>
