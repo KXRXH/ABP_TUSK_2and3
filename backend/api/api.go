@@ -75,7 +75,7 @@ func (api *ApiInterface) InitApp() {
 	api.App.Delete("/api/position/:id", controllers.DeletePosition)
 	// PriceChange
 	api.App.Get("/api/pricechange/", controllers.GetAllPriceChange)
-	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange) // НАДО ЛИ ОНО?
+	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange)
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
 }

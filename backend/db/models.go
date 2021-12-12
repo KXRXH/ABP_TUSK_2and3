@@ -27,6 +27,7 @@ type User struct {
 	Phone    string `json:"phone"`
 	Mail     string `json:"mail"`
 	Birth    string `json:"date"`
+	Login    string `json:"login"`
 	Status   Status `gorm:"foreignKey:ID"`
 }
 
@@ -38,7 +39,6 @@ type Employee struct {
 	Phone    string   `json:"phone"`
 	Mail     string   `json:"mail"`
 	Birth    string   `json:"date"`
-	Password string   `json:"password"` //DELETE THIS
 	Position Position `gorm:"foreignKey:ID"`
 }
 
