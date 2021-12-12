@@ -48,13 +48,14 @@ type Employee struct {
 }
 
 type Nomenclature struct {
-	ID         int              `json:"id"`
-	Article    string           `json:"code"`
-	StartDate  time.Time        `json:"start"`
-	FinishDate time.Time        `json:"finish"`
-	Name       string           `json:"name"`
-	Used       bool             `json:"used"`
-	Type       NomenclatureType `gorm:"foreignKey:ID"`
+	ID         int       `json:"id"`
+	Article    string    `json:"code"`
+	StartDate  time.Time `json:"start"`
+	FinishDate time.Time `json:"finish"`
+	Name       string    `json:"name"`
+	Used       bool      `json:"used"`
+	TypeId     int
+	Type       NomenclatureType `gorm:"foreignKey:TypeId"`
 }
 
 type Payment struct {

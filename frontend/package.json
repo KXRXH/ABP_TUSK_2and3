@@ -28,9 +28,7 @@
     "wait-on": "3.3.0"
   },
   "build": {
-    "publish": {
-      "provider": "null"
-    }
+    "publish": null
   },
   "main": "public/electron.js",
   "homepage": "./",
