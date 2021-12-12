@@ -5,6 +5,14 @@ import { Nomenclature } from '../forms/Nomenclature.js';
 import { Tariff } from '../forms/Tariff.js';
 import { Payment } from '../forms/Payment.js';
 
+const dateDelayOk = time => {
+    let old = new Date(time);
+    let now = new Date();
+    return Math.abs(old - now) / 36e5 >= 24;
+}
+const currentDate = () => {
+    return new Date().toISOString();
+}
 export class Note extends Component {
     constructor(props) {
         super(props)
@@ -44,7 +52,7 @@ export class Note extends Component {
 			return this.state.data.map(row => <tr>
                 <td>{row.title}</td>
                 <td>{row.price}</td>
-                {(this.props.position < 3) ? <td><Button 
+                {(this.props.position < 3 && dateDelayOk(row.time)) ? <td><Button 
                         onClick={() => this.setState({tariffID: row.id, tariff: row})}>Изменить</Button></td> : null}
             </tr>)
 		}
@@ -164,6 +172,7 @@ export class Note extends Component {
                                     "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
+                                    "time": currentDate(),
                                     "price": newValue
                                 })
                             }).then(r => r.json()).then(r=>console.log(r), e=> console.log(e));
