@@ -22,7 +22,7 @@ export class Login extends Component {
 		}).then(response => response.json()).then(
 			result => {
                 // Check success login
-                if (result.message !== "ok") {
+                if (!result.message) {
                     this.props.setEmployee(null);
                     this.setState({error: true});
                     alert("Ошибка доступа!")

@@ -14,19 +14,38 @@ class App extends Component {
 			employee: null,
 			ePos: 100,
 			actionIndex: 0,
+			nomToChangeId: -1,
+			isCreateNom: true,
 		}
 		this.callNote = this.callNote.bind(this);
+		this.changeNomenclature = this.changeNomenclature.bind(this);
+		this.changeAction = this.changeAction.bind(this);
 	}
 	callNote(paragraph) {
 		this.setState({
 			actionIndex: paragraph,
 		})
 	}
+	changeNomenclature(id) {
+		this.setState({
+			actionIndex: 4, // magic number.
+			isCreateNom: false,
+			nomToChangeId: id,
+		})
+	}
+	changeAction(index) {
+		this.setState({actionIndex: index, isCreateNom: false, nomToChangeId: -1});
+	}
 	render() {
 		console.log(this.state.userToken)
 		const bodyContent = (this.state.employee === null) ? 
-			<Login setEmployee={u => this.setState({employee: u, ePos: u ? u.PositionId : null})}/> : 
-			<Note actionIndex={this.state.actionIndex}/>
+			<Login setEmployee={u => this.setState({employee: u, ePos: u ? u.PositionId : 100})}/> : 
+			<Note isCreateNom={this.state.isCreateNom} 
+				nomToChangeId={this.state.nomToChangeId}
+				changeNomenclature={this.changeNomenclature}
+				actionIndex={this.state.actionIndex} 
+				changeAction={this.changeAction}
+				position={this.state.ePos}/>
 		return (
 			<div className="App">
 				<Header position={this.state.ePos} 
