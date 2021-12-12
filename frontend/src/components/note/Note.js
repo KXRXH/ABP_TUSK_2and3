@@ -41,11 +41,11 @@ export class Note extends Component {
         }
     }
 	getTable() {
-		if (this.props.actionIndex === 0)
+		if (this.props.actionIndex === 0) // Номенклатура
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td>
 				<td>{row.name}</td>
-				<td>{row.Type ? row.title : ""}</td>
+				<td>{row.Type ? row.Type.title : ""}</td>
 				<td>{row.used ? "Да" : "Нет"}</td>
 				<td>{getDate(row.start)}</td>
 				<td>{getDate(row.finish)}</td>

@@ -16,7 +16,7 @@ export class Nomenclature extends Component {
             name: "",
             type: "0",
             types: [],
-            typeId: -1,
+            typeId: 0,
         }
         this.handleCodeChange = this.handleCodeChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -44,25 +44,35 @@ export class Nomenclature extends Component {
     getType(id) {
         for (let k in this.state.types) {
             if (k.id == id) {
-                return k;
+                return k.title;
             }
         }
-        return {title: ""}
+        return ""
     }
     onSubmit() {
         if (this.props.isCreate) {
+            console.log(JSON.stringify({
+                    "code": this.state.code,
+                    "name": this.state.name,
+                    "used": true,
+                    "Type": {
+                        "id": this.state.typeId -0,
+                        "title": this.getType(this.state.typeId - 0)
+                    }
+ 
+            }))
             fetch(API_ADDRESS + "nomenclature", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    code: this.state.code,
-                    name: this.state.name,
-                    used: true,
-                    Type: {
-                        id: this.state.typeId,
-                        title: this.getType(this.state.typeId)
+                    "code": this.state.code,
+                    "name": this.state.name,
+                    "used": true,
+                    "Type": {
+                        "id": this.state.typeId - 0,
+                        "title": this.getType(this.state.typeId - 0)
                     }
                 })
             }).then(res => res.json()).then(r => console.log(r), e => console.log(e))
@@ -109,11 +119,11 @@ export class Nomenclature extends Component {
                         <Row className="mb-3">
                             <InputGroup>
                                 <InputGroup.Text>Тип товара</InputGroup.Text>
-                                <Form.Select onChange={e => this.setState({typeId: e.target.value})}>
+                                <Form.Control as="select" onChange={e => this.setState({typeId: e.target.value})}>
                                 {this.state.types.map(value => {
                                     return <option value={value.id}>{value.title}</option>
                                 })}
-                                </Form.Select>
+                                </Form.Control>
                             </InputGroup>
                          </Row>
                 </Card.Body>
