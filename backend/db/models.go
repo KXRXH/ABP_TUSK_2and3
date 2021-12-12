@@ -32,7 +32,6 @@ type User struct {
 	Phone    string `json:"phone"`
 	Mail     string `json:"mail"`
 	Birth    string `json:"date"`
-	Login    string `json:"login"`
 	Status   Status `gorm:"foreignKey:ID"`
 }
 
@@ -44,6 +43,7 @@ type Employee struct {
 	Phone    string   `json:"phone"`
 	Mail     string   `json:"mail"`
 	Birth    string   `json:"date"`
+	Login    string   `json:"login"`
 	Position Position `gorm:"foreignKey:ID"`
 }
 
