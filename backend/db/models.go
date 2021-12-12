@@ -33,7 +33,7 @@ type User struct {
 	Mail     string `json:"mail"`
 	Birth    string `json:"date"`
 	StatusId int
-	Status   Status `gorm:"foreignKey:ID"`
+	Status   Status `gorm:"foreignKey:StatusId"`
 }
 
 type Employee struct {
@@ -46,7 +46,7 @@ type Employee struct {
 	Birth      string `json:"date"`
 	Login      string `json:"login"`
 	PositionId int
-	Position   Position `gorm:"foreignKey:ID"`
+	Position   Position `gorm:"foreignKey:PositionId"`
 }
 
 type Nomenclature struct {
@@ -65,9 +65,9 @@ type Payment struct {
 	Long      int       `json:"long"`
 	StartTime time.Time `json:"time"`
 	UserId    int
-	User      User `gorm:"foreignKey:ID"`
+	User      User `gorm:"foreignKey:UserId"`
 	ProductId int
-	Product   Nomenclature `gorm:"foreignKey:ID"`
+	Product   Nomenclature `gorm:"foreignKey:ProductId"`
 	Sum       int          `json:"sum"`
 }
 
@@ -84,11 +84,11 @@ type Rent struct {
 	ID        int       `json:"id"`
 	Time      time.Time `json:"finish"`
 	UserId    int
-	User      User `gorm:"foreignKey:ID"`
+	User      User `gorm:"foreignKey:UserId"`
 	BaseId    int
-	Base      Base `gorm:"foreignKey:ID"`
+	Base      Base `gorm:"foreignKey:BaseId"`
 	ProductId int
-	Product   Nomenclature `gorm:"foreignKey:ID"`
+	Product   Nomenclature `gorm:"foreignKey:ProductId"`
 	IsStart   bool         `json:"is_start"` // is it rent start or rent finished?
 }
 
