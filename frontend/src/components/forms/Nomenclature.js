@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button, Form, Row, Col, Card, InputGroup} from 'react-bootstrap'
+import {Button, Form, Row, Card, InputGroup} from 'react-bootstrap'
 import {API_ADDRESS} from '../../constants.js'
 import './forms.css'
 
@@ -41,7 +41,7 @@ export class Nomenclature extends Component {
     }
     getType(id) {
         for (let k in this.state.types) {
-            if (k.id == id) {
+            if (k.id === id) {
                 return k.title;
             }
         }

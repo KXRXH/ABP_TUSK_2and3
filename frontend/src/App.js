@@ -52,7 +52,6 @@ class App extends Component {
 		this.setState({actionIndex: index, isCreateNom: true, nomToChangeId: -1});
 	}
 	render() {
-		console.log(this.state.userToken)
 		const bodyContent = (this.state.employee === null) ? 
 			<Login setEmployee={u => this.setState({employee: u, ePos: u ? u.PositionId : 100})}/> : 
 			<Note isCreateNom={this.state.isCreateNom} 
@@ -65,6 +64,7 @@ class App extends Component {
 				code={this.state.nom.code}
 				name={this.state.nom.name}
 				date={this.state.date}
+				tariffID={-1}
 			/>
 		return (
 			<div className="App">

@@ -12,7 +12,7 @@ export class Note extends Component {
 			data: [],
             url: REQUEST_PATH[props.actionIndex].url,
             titles: REQUEST_PATH[props.actionIndex].titles,
-            tariffID: -1,
+            tariffID: this.props.tariffID,
             tariff: {},
             types: [],
         };
@@ -29,7 +29,7 @@ export class Note extends Component {
                     <td><Button onClick={() => this.props.changeNomenclature(row)}>Изменить</Button></td> 
                     : null
                 }
-                {this.props.position == 1 ? 
+                {this.props.position === 1 ? 
                     <td><Button onClick={() => (window.confirm('Delete the item?')) ? this.props.deleteNomenclature(row.id) 
                     : null}>Удалить</Button></td> 
                     : null
@@ -88,7 +88,6 @@ export class Note extends Component {
         if (this.props.actionIndex > 3) {
             return;
         } else {
-            console.log(this.props.actionIndex);
             fetch(REQUEST_PATH[this.props.actionIndex].url)
             .then(res => res.json())
             .then(
@@ -123,7 +122,7 @@ export class Note extends Component {
             return <Nomenclature 
                     onSubmit={() => this.props.changeAction(0)}
                     defaultId={this.props.nomToChangeId} isCreate={false}
-                    code={this.state.code} defaultId={this.props.nomToChangeId} name={this.state.name}
+                    code={this.state.code} name={this.state.name}
             />
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 

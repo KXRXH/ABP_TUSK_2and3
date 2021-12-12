@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button, Form, Row, Col, Card, Alert} from 'react-bootstrap'
+import {Button, Form, Row, Card} from 'react-bootstrap'
 import {API_ADDRESS} from '../../constants.js'
 import './forms.css'
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button, Form, Row, Col, Card, Alert, InputGroup} from 'react-bootstrap'
+import {Button, Form, Row, Col, Card, InputGroup} from 'react-bootstrap'
 import {API_ADDRESS} from '../../constants.js'
 import './forms.css'
 
@@ -27,7 +27,7 @@ export class Tariff extends Component {
    
     handleSubmit(event) {
         event.preventDefault();
-        this.props.onSubmit(this.state.value- 0);
+        this.props.onSubmit(this.state.value - 0);
     }
     render(){
         return (
