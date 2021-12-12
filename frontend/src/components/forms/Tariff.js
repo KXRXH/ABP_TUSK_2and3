@@ -7,10 +7,9 @@ export class Tariff extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: d.toISOString().split("T")[0],
-            number: this.props.defaultId,
             typeId: this.props.typeId,
             types: [],
+            value: this.props.oldValue,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -28,27 +27,7 @@ export class Tariff extends Component {
    
     handleSubmit(event) {
         event.preventDefault();
-        console.log(event.target.mail.value);
-        console.log(event.target.password.value);
-        fetch(API_ADDRESS + "login", {
-			method: "POST", 
-            headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				email: event.target.mail.value, password: event.target.password.value,
-			})
-		}).then(response => response.json()).then(
-			result => {
-                // Check success login
-                if (!result.message) {
-                    this.props.setEmployee(null);
-                    this.setState({error: true});
-                    alert("Ошибка доступа!")
-                    return;
-                }
-                this.props.setEmployee(result.user)
-            },
-			error => {this.props.setEmployee(null); this.setState({error: true})}
-		)
+        this.props.onSubmit(this.state.value- 0);
     }
     render(){
         return (
@@ -72,7 +51,9 @@ export class Tariff extends Component {
                         <InputGroup.Text>
                         Тариф:
                         </InputGroup.Text>
-                            <Form.Control placeholder="Тариф" type="number" name="tariff"/>
+                            <Form.Control onChange={e => this.setState({value: e.target.value})} 
+                                    placeholder="Новый тариф" type="number" name="tariff" value={this.state.value}
+                            />
                         </InputGroup>
                     </Row>
                 </Card.Body>

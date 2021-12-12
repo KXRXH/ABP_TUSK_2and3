@@ -25,6 +25,8 @@ const Header = props => {
                     </NavDropdown> : null}
                     <NavDropdown title="Прайс и аренда">
                         <NavDropdown.Item onClick={() => props.callNote(1)}>Тарифы</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(6)}>Изменения тарифов</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => props.callNote(5)}>Оплата</NavDropdown.Item>
                     </NavDropdown>
                     <UserTitle/>
                 </Nav>

@@ -9,6 +9,7 @@ const API_ADDRESS = "http://localhost:3001/api/";
 class App extends Component {
 	constructor(props) {
 		super(props)
+		const d = new Date();
 		this.state = {
 			currentTab: "users",
 			employee: null,
@@ -16,6 +17,8 @@ class App extends Component {
 			actionIndex: 0,
 			nomToChangeId: -1,
 			isCreateNom: true,
+			nom: {},
+			date: d.toISOString().split('T')[0],
 		}
 		this.callNote = this.callNote.bind(this);
 		this.changeNomenclature = this.changeNomenclature.bind(this);
@@ -26,11 +29,12 @@ class App extends Component {
 			actionIndex: paragraph,
 		})
 	}
-	changeNomenclature(id) {
+	changeNomenclature(row) {
 		this.setState({
 			actionIndex: 4, // magic number.
 			isCreateNom: false,
-			nomToChangeId: id,
+			nomToChangeId: row.id,
+			nom: row,
 		})
 	}
 	deleteNomenclature(id) {
@@ -57,7 +61,11 @@ class App extends Component {
 				deleteNomenclature={this.deleteNomenclature.bind(this)}
 				actionIndex={this.state.actionIndex} 
 				changeAction={this.changeAction}
-				position={this.state.ePos}/>
+				position={this.state.ePos}
+				code={this.state.nom.code}
+				name={this.state.nom.name}
+				date={this.state.date}
+			/>
 		return (
 			<div className="App">
 				<Header position={this.state.ePos} 

@@ -7,13 +7,11 @@ import './forms.css'
 export class Nomenclature extends Component {
     constructor(props) {
         super(props);
-        let d = new Date();
-        console.log(d.toISOString())
         this.state = {
-            date: d.toISOString().split("T")[0],
+            date: this.props.date,
             number: this.props.defaultId,
-            code: "",
-            name: "",
+            code: this.props.code,
+            name: this.props.name,
             type: "0",
             types: [],
             typeId: 0,
