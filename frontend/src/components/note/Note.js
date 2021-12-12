@@ -3,10 +3,12 @@ import { Button, Table } from 'react-bootstrap';
 import {API_ADDRESS, REQUEST_PATH, getDate} from '../../constants.js'
 import { Nomenclature } from '../forms/Nomenclature.js';
 import { Tariff } from '../forms/Tariff.js';
+import { Payment } from '../forms/Payment.js';
 
 export class Note extends Component {
     constructor(props) {
         super(props)
+        let d = new Date();
         this.state = {
             error: null,
 			data: [],
@@ -15,7 +17,9 @@ export class Note extends Component {
             tariffID: this.props.tariffID,
             tariff: {},
             types: [],
+            date: d.toISOString().split('T')[0],
         };
+        this.getTypes();
         setInterval(() => this.Update(), 2000);
     }
 	getTable() {
@@ -67,25 +71,37 @@ export class Note extends Component {
         if (this.props.actionIndex === 5) {
             return this.state.data.map(row => <tr>
                 <td>{row.long}</td>
-                <td>{row.time}</td>
+                <td>{row.time.split('T')[0]}</td>
                 <td>{row.User ? row.User.mail : null}</td>
                 <td>{row.Product ? row.Product.name : null}</td>
                 <td>{row.User ? row.User.Status.discount : null}</td>
-                <td>{row.Nomenclature ? row.Nomenclature.Type.price : null}</td>
+                <td>{row.Product.Type.price}</td>
                 <td>{row.sum}</td>
             </tr>)
         }
         if (this.props.actionIndex === 6) {
             return this.state.data.map(row => <tr>
-                <td>{row.time}</td>
+                <td>{row.time.split('T')[0]}</td>
                 <td>{row.oldvalue}</td>
                 <td>{row.newvalue}</td>
-                <td>{this.state.types[row.type_id]}</td>
+                <td>{this.getTypeById(row.type_id).title}</td>
             </tr>)
         }
+        if (this.props.actionIndex === 7) {
+            return <Payment date={this.state.date} number="Следующий" />
+        }
 	}
+    getTypeById(id) {
+        console.log(id);
+        for (let k in this.state.types) {
+            if (k.id === id) {
+                return k;
+            }
+        }
+        return {title: "f"}
+    }
     Update() {
-        if (this.props.actionIndex > 3) {
+        if (this.props.actionIndex == 4) {
             return;
         } else {
             fetch(REQUEST_PATH[this.props.actionIndex].url)
@@ -124,6 +140,8 @@ export class Note extends Component {
                     defaultId={this.props.nomToChangeId} isCreate={false}
                     code={this.state.code} name={this.state.name}
             />
+        } else if (this.props.actionIndex === 7) {
+            return this.getTable();
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 
         if (this.props.actionIndex === 0) {
