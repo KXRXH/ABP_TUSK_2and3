@@ -32,36 +32,41 @@ type User struct {
 	Phone    string `json:"phone"`
 	Mail     string `json:"mail"`
 	Birth    string `json:"date"`
+	StatusId int
 	Status   Status `gorm:"foreignKey:ID"`
 }
 
 type Employee struct {
-	ID       int      `json:"id"`
-	Name     string   `json:"name"`
-	Surname  string   `json:"surname"`
-	Lastname string   `json:"lastname"`
-	Phone    string   `json:"phone"`
-	Mail     string   `json:"mail"`
-	Birth    string   `json:"date"`
-	Login    string   `json:"login"`
-	Position Position `gorm:"foreignKey:ID"`
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Lastname   string `json:"lastname"`
+	Phone      string `json:"phone"`
+	Mail       string `json:"mail"`
+	Birth      string `json:"date"`
+	Login      string `json:"login"`
+	PositionId int
+	Position   Position `gorm:"foreignKey:ID"`
 }
 
 type Nomenclature struct {
-	ID         int              `json:"id"`
-	Article    string           `json:"code"`
-	StartDate  time.Time        `json:"start"`
-	FinishDate time.Time        `json:"finish"`
-	Name       string           `json:"name"`
-	Used       bool             `json:"used"`
-	Type       NomenclatureType `gorm:"foreignKey:ID"`
+	ID         int       `json:"id"`
+	Article    string    `json:"code"`
+	StartDate  time.Time `json:"start"`
+	FinishDate time.Time `json:"finish"`
+	Name       string    `json:"name"`
+	Used       bool      `json:"used"`
+	TypeId     int
+	Type       NomenclatureType `gorm:"foreignKey:TypeId"`
 }
 
 type Payment struct {
-	ID        int          `json:"id"`
-	Long      int          `json:"long"`
-	StartTime time.Time    `json:"time"`
-	User      User         `gorm:"foreignKey:ID"`
+	ID        int       `json:"id"`
+	Long      int       `json:"long"`
+	StartTime time.Time `json:"time"`
+	UserId    int
+	User      User `gorm:"foreignKey:ID"`
+	ProductId int
 	Product   Nomenclature `gorm:"foreignKey:ID"`
 	Sum       int          `json:"sum"`
 }
@@ -76,12 +81,15 @@ type Base struct {
 }
 
 type Rent struct {
-	ID      int          `json:"id"`
-	Time    time.Time    `json:"finish"`
-	User    User         `gorm:"foreignKey:ID"`
-	Base    Base         `gorm:"foreignKey:ID"`
-	Product Nomenclature `gorm:"foreignKey:ID"`
-	IsStart bool         `json:"is_start"` // is it rent start or rent finished?
+	ID        int       `json:"id"`
+	Time      time.Time `json:"finish"`
+	UserId    int
+	User      User `gorm:"foreignKey:ID"`
+	BaseId    int
+	Base      Base `gorm:"foreignKey:ID"`
+	ProductId int
+	Product   Nomenclature `gorm:"foreignKey:ID"`
+	IsStart   bool         `json:"is_start"` // is it rent start or rent finished?
 }
 
 type PriceChange struct {

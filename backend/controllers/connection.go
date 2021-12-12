@@ -14,7 +14,7 @@ func Login(c *fiber.Ctx) error {
 	}
 	var employee db.Employee
 	// ПРОВЕРКА ЛОГИНА И ПАРОЛЯ
-	db.DB.Where("login = ?", data["login"]).First(&employee)
+	db.DB.Where("Login = ?", data["login"]).First(&employee)
 	if employee.ID == 0 {
 		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
