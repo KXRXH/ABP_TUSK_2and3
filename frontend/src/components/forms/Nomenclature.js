@@ -51,16 +51,6 @@ export class Nomenclature extends Component {
     }
     onSubmit() {
         if (this.props.isCreate) {
-            console.log(JSON.stringify({
-                    "code": this.state.code,
-                    "name": this.state.name,
-                    "used": true,
-                    "Type": {
-                        "id": this.state.typeId -0,
-                        "title": this.getType(this.state.typeId - 0)
-                    }
- 
-            }))
             fetch(API_ADDRESS + "nomenclature", {
                 method: "POST",
                 headers: {
@@ -77,15 +67,23 @@ export class Nomenclature extends Component {
                 })
             }).then(res => res.json()).then(r => console.log(r), e => console.log(e))
         } else {
-            fetch(API_ADDRESS + "nomenclature", {
+            console.log("Number = ", this.state.number);
+            fetch(API_ADDRESS + "nomenclature/" + "" + this.state.number, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    "code": this.state.code,
+                    "name": this.state.name,
+                    "used": true,
+                    /*"Type": {
+                        "id": this.state.typeId -0,
+                        "title": this.getType(this.state.typeId - 0)
+                    } */
 
                 })
-            }) 
+            }).then(res => res.json()).then(r => console.log(r), e => console.log(e));
         }
         this.props.onSubmit();
     }
@@ -127,7 +125,7 @@ export class Nomenclature extends Component {
                             </InputGroup>
                          </Row>
                 </Card.Body>
-                <Button onClick={this.onSubmit}>Создать</Button>
+                <Button onClick={this.onSubmit}>{this.props.isCreate ? "Создать" : "Изменить"}</Button>
                 </Form>
            </Card>
         )

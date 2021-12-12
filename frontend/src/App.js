@@ -33,6 +33,17 @@ class App extends Component {
 			nomToChangeId: id,
 		})
 	}
+	deleteNomenclature(id) {
+		fetch(API_ADDRESS + "nomenclature/" + id, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: {
+				"id": id - 0,
+			}
+		})
+	}
 	changeAction(index) {
 		this.setState({actionIndex: index, isCreateNom: false, nomToChangeId: -1});
 	}
@@ -43,6 +54,7 @@ class App extends Component {
 			<Note isCreateNom={this.state.isCreateNom} 
 				nomToChangeId={this.state.nomToChangeId}
 				changeNomenclature={this.changeNomenclature}
+				deleteNomenclature={this.deleteNomenclature.bind(this)}
 				actionIndex={this.state.actionIndex} 
 				changeAction={this.changeAction}
 				position={this.state.ePos}/>

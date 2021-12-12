@@ -9,9 +9,9 @@ const REQUEST_PATH = {
         ]
     },
     1: {
-        url: API_ADDRESS + "price",
+        url: API_ADDRESS + "nomenclature_type",
         titles: [
-            "Дата последнего изменения", "Тип номенклатуры", "Тариф"
+            "Тип номенклатуры", "Тариф"
         ]
     },
     2: {
