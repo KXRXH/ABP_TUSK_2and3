@@ -38,15 +38,13 @@ func UpdateNomenclature(context *fiber.Ctx) error {
 	}
 
 	model := db.Nomenclature{}
-
 	err := context.BodyParser(&model)
 	if err != nil {
 		context.Status(http.StatusUnprocessableEntity).JSON(
 			&fiber.Map{"message": "request failed"})
 		return err
 	}
-
-	err = db.DB.Model(model).Where("id = ?", id).Updates(model).Error
+	err = db.DB.Model(&model).Where("id = ?", id).Updates(&model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "could not update user",
@@ -128,8 +126,8 @@ func GetNomenclature(context *fiber.Ctx) error {
 }
 
 func GetLastNomenclature(context *fiber.Ctx) error {
-	model := &db.Nomenclature{}
-	err := db.DB.Order("id desc").Last(model).Error
+	model := db.Nomenclature{}
+	err := db.DB.Order("id desc").Last(&model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})

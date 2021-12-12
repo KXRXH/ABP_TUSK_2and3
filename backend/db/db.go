@@ -19,8 +19,8 @@ func InitDB(dbName string) {
 	}
 	err = DB.AutoMigrate(
 		&User{}, &Status{}, &Position{}, &Employee{},
-		&Nomenclature{}, NomenclatureType{},
-		&Payment{}, &Base{}, &Rent{}, &Price{},
+		&Nomenclature{}, &NomenclatureType{},
+		&Payment{}, &Base{}, &Rent{}, &PriceChange{},
 	)
 	if err != nil {
 		log.WithFields(log.Fields{

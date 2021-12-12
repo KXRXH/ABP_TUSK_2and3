@@ -73,16 +73,9 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/position/", controllers.CreatePosition)
 	api.App.Put("/api/position/:id", controllers.UpdatePosition)
 	api.App.Delete("/api/position/:id", controllers.DeletePosition)
-	// Price
-	api.App.Get("/api/price/", controllers.GetAllPrices)
-	api.App.Get("/api/price/:id", controllers.GetPrice)
-	api.App.Post("/api/price/", controllers.CreatePrice)
-	api.App.Put("/api/price/:id", controllers.UpdatePrice)
-	api.App.Delete("/api/price/:id", controllers.DeletePrice)
 	// PriceChange
 	api.App.Get("/api/pricechange/", controllers.GetAllPriceChange)
-	api.App.Post("/api/pricechange/", controllers.CreatePriceChange)
-	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange)
+	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange) // НАДО ЛИ ОНО?
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
 }

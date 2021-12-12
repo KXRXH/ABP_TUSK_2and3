@@ -14,6 +14,7 @@ type Position Item
 type NomenclatureType struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
+	Price int    `json:"price"`
 }
 
 type User struct {
@@ -35,7 +36,7 @@ type Employee struct {
 	Phone    string   `json:"phone"`
 	Mail     string   `json:"mail"`
 	Birth    string   `json:"date"`
-	Password string   `json:"password"`
+	Password string   `json:"password"` //DELETE THIS
 	Position Position `gorm:"foreignKey:ID"`
 }
 
@@ -78,16 +79,9 @@ type Rent struct {
 	IsStart bool         `json:"is_start"` // is it rent start or rent finished?
 }
 
-type Price struct {
-	ID               int              `json:"id"`
-	Time             time.Time        `json:"time"`
-	Value            int              `json:"value"`
-	NomenclatureType NomenclatureType `gorm:"foreignKey:ID"`
-}
-
 type PriceChange struct {
-	Time     time.Time        `json:"time"`
-	Type     NomenclatureType `gorm:"foreignKey:ID"`
-	OldValue int              `json:"oldvalue"`
-	NewValue int              `json:"newvalue"`
+	Time     time.Time `json:"time"`
+	OldValue int       `json:"oldvalue"`
+	NewValue int       `json:"newvalue"`
+	TypeId   int       `json:"type_id"`
 }
