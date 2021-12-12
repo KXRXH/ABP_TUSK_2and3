@@ -40,7 +40,7 @@ export class Payment extends Component {
    
     handleSubmit(event) {
         const d = new Date(this.state.date);
-        const total = (this.state.time * this.state.product.Type.price) * (1 - this.state.user.Status.discount)
+        const total = (this.state.time * this.state.product.Type.price) * (1 - 0.01 * this.state.user.Status.discount)
         event.preventDefault();
         fetch(API_ADDRESS + "payment", {
             method: "POST",
@@ -52,7 +52,7 @@ export class Payment extends Component {
                 "time": d,
                 "User": this.state.user,
                 "Product": this.state.product,
-                "sum": this.state.total,
+                "sum": total,
             })
         }).then(res => res.json()).then(r=>console.log(r), _=>{})
     }
@@ -77,7 +77,7 @@ export class Payment extends Component {
                             onChange={e => this.setState({
                                     userId: e.target.value,
                                     user: this.state.users[e.target.value],
-                                    total: (this.state.time * this.state.product.Type.price) * (1 - this.state.user.Status.discount)
+                                    total: (this.state.time * this.state.product.Type.price) * (1 - 0.01 * this.state.users[e.target.value].Status.discount)
                                 })}>
                                 {this.state.users.map((value, i) => {
                                     return <option value={i}>{value.surname + " " + value.name + " " + value.lastname}</option>
@@ -91,7 +91,7 @@ export class Payment extends Component {
                         <InputGroup.Text>Время аренды: </InputGroup.Text>
                                 <Form.Control type="number" value={this.state.time}
                                     onChange={e => this.setState({time: e.target.value,
-                                    total: (e.target.value * this.state.product.Type.price) * (1 - this.state.user.Status.discount)
+                                    total: (e.target.value * this.state.product.Type.price) * (1 - 0.01 * this.state.user.Status.discount)
                                     })} 
                                     />
                         </InputGroup>
@@ -102,7 +102,7 @@ export class Payment extends Component {
                             onChange={e => this.setState({
                                     productId: e.target.value,
                                     product: this.state.products[e.target.value],
-                                    total: (this.state.time * this.state.product.Type.price) * (1 - this.state.user.Status.discount)
+                                    total: (this.state.time * this.state.products[e.target.value].Type.price) * (1 - 0.01 * this.state.user.Status.discount)
                                 })}>
                                 {this.state.products.map((value, i) => {
                                     return <option value={i}>{value.name}</option>

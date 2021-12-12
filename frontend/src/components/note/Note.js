@@ -71,37 +71,33 @@ export class Note extends Component {
         if (this.props.actionIndex === 5) {
             return this.state.data.map(row => <tr>
                 <td>{row.long}</td>
-                <td>{row.time.split('T')[0]}</td>
+                <td>{row.time ? row.time.split('T')[0] : null}</td>
                 <td>{row.User ? row.User.mail : null}</td>
                 <td>{row.Product ? row.Product.name : null}</td>
                 <td>{row.User ? row.User.Status.discount : null}</td>
-                <td>{row.Product.Type.price}</td>
+                <td>{row.Product ? row.Product.Type.price : null}</td>
                 <td>{row.sum}</td>
             </tr>)
         }
         if (this.props.actionIndex === 6) {
             return this.state.data.map(row => <tr>
-                <td>{row.time.split('T')[0]}</td>
+                <td>{row.time ? row.time.split('T')[0] : row.time}</td>
                 <td>{row.oldvalue}</td>
                 <td>{row.newvalue}</td>
                 <td>{this.getTypeById(row.type_id).title}</td>
             </tr>)
         }
-        if (this.props.actionIndex === 7) {
-            return <Payment date={this.state.date} number="Следующий" />
-        }
-	}
+       	}
     getTypeById(id) {
-        console.log(id);
-        for (let k in this.state.types) {
-            if (k.id === id) {
-                return k;
+        for (let k = 0; k < this.state.types.length; ++k) {
+            if (this.state.types[k].id == id) {
+                return this.state.types[k];
             }
         }
         return {title: "f"}
     }
     Update() {
-        if (this.props.actionIndex == 4) {
+        if (this.props.actionIndex === 4 || this.props.actionIndex === 7) {
             return;
         } else {
             fetch(REQUEST_PATH[this.props.actionIndex].url)
@@ -141,7 +137,7 @@ export class Note extends Component {
                     code={this.state.code} name={this.state.name}
             />
         } else if (this.props.actionIndex === 7) {
-            return this.getTable();
+            return <Payment date={this.state.date} number="Следующий" />
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 
         if (this.props.actionIndex === 0) {
@@ -156,7 +152,7 @@ export class Note extends Component {
                 titles.push(<th>Изменить</th>)
             }
         }
-        if (this.state.tariffID !== -1) {
+        if (this.state.tariffID != -1) {
             return <Tariff date={Date().toString()} 
                     defaultId={this.state.tariffID} 
                     number={this.state.tariffID}
