@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"dblib/db"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
@@ -11,12 +10,11 @@ import (
 func Login(c *fiber.Ctx) error {
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
-		fmt.Println(data)
 		return err
 	}
 	var employee db.Employee
 	// ПРОВЕРКА ЛОГИНА И ПАРОЛЯ
-	db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"]).First(&employee)
+	db.DB.Where("login = ?", data["login"]).First(&employee)
 	if employee.ID == 0 {
 		c.Status(fiber.StatusForbidden)
 		return c.JSON(fiber.Map{
@@ -24,7 +22,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	// ПОДТЯГИВАЕМ ЗНАЧЕНИЯ ИЗ 2 positions
-	db.DB.Joins("Position", db.DB.Where("Mail = ? AND Password = ?", data["email"], data["password"])).First(&employee)
+	db.DB.Joins("Position", db.DB.Where("Login = ?", data["login"])).First(&employee)
 	// ТУТ ФОРМИРОВАНИЕ ИНФОРМАЦИИ О USER'е
 	claim := jwt.MapClaims{
 		"ID":           employee.ID,
