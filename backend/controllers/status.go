@@ -71,13 +71,12 @@ func DeleteStatus(context *fiber.Ctx) error {
 
 	model := db.Status{}
 
-	err := db.DB.Delete(model, id)
-
-	if err.Error != nil {
+	err := db.DB.Delete(model, id).Error
+	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "could not delete nomenclature",
 		})
-		return err.Error
+		return err
 	}
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{

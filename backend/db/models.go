@@ -43,7 +43,7 @@ type Employee struct {
 	Phone    string   `json:"phone"`
 	Mail     string   `json:"mail"`
 	Birth    string   `json:"date"`
-	Password string   `json:"password"` //DELETE THIS
+	Login    string   `json:"login"`
 	Position Position `gorm:"foreignKey:ID"`
 }
 
