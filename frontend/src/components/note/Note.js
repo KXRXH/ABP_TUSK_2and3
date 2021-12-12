@@ -61,8 +61,7 @@ export class Note extends Component {
 				<td>{row.name}</td>
 				<td>{row.address}</td>
 				<td>{row.index}</td>
-				<td>{row.coords.split(' ')[0]}</td>
-				<td>{row.coords.split(' ')[1]}</td>
+				<td>{row.coords}</td>
 			</tr>)
 		}
         if (this.props.actionIndex === 5) {
@@ -78,7 +77,7 @@ export class Note extends Component {
         }
         if (this.props.actionIndex === 6) {
             return this.state.data.map(row => <tr>
-                <td>{row.time.split("T")[0]}</td>
+                <td>{row.time}</td>
                 <td>{row.oldvalue}</td>
                 <td>{row.newvalue}</td>
                 <td>{this.state.types[row.type_id]}</td>
@@ -115,11 +114,12 @@ export class Note extends Component {
     }
     render() {
         if (this.props.actionIndex === 4) {
-            if (this.props.isCreate)
+            if (this.props.isCreateNom) {
             return <Nomenclature 
                     onSubmit={() => this.props.changeAction(0)}
                     defaultId={this.props.nomToChangeId} isCreate={true}
                 />
+            }
             return <Nomenclature 
                     onSubmit={() => this.props.changeAction(0)}
                     defaultId={this.props.nomToChangeId} isCreate={false}

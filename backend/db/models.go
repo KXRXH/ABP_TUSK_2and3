@@ -9,7 +9,12 @@ type Item struct {
 	Title string `json:"title"`
 }
 
-type Status Item
+type Status struct {
+	ID       int    `json:"id"`
+	Title    string `json:"title"`
+	Discount int    `json:"discount"`
+}
+
 type Position Item
 
 type NomenclatureType struct {
