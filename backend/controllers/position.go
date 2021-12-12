@@ -46,7 +46,7 @@ func UpdatePosition(context *fiber.Ctx) error {
 		return err
 	}
 
-	err = db.DB.Model(model).Where("id = ?", id).Updates(model).Error
+	err = db.DB.Model(&model).Where("id = ?", id).Updates(&model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "could not update user",
