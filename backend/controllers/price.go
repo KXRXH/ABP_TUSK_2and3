@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"dblib/db"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -45,19 +47,28 @@ func UpdatePrice(context *fiber.Ctx) error {
 			&fiber.Map{"message": "request failed"})
 		return err
 	}
+	fmt.Println(model.Time)
+	timeNow := time.Now()
+	diff := model.Time.Sub(timeNow).Hours()
+	// ВОЗМОЖНО РАБОЧАЯ ПРОВЕРКА НА 24Ч DELAY
+	if diff >= 24 {
+		err = db.DB.Model(model).Where("id = ?", id).Updates(model).Error
+		if err != nil {
+			context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"message": "could not update user",
+			})
+			return err
+		}
 
-	err = db.DB.Model(model).Where("id = ?", id).Updates(model).Error
-	if err != nil {
-		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
-			"message": "could not update user",
+		context.Status(http.StatusOK).JSON(&fiber.Map{
+			"message": "book has been successfully updated",
 		})
-		return err
+		return nil
 	}
-
-	context.Status(http.StatusOK).JSON(&fiber.Map{
-		"message": "book has been successfully updated",
+	return context.JSON(fiber.Map{
+		"message": "Последнее изменение цены происходило менее 24 часов назад.",
 	})
-	return nil
+
 }
 
 func DeletePrice(context *fiber.Ctx) error {
@@ -88,7 +99,7 @@ func DeletePrice(context *fiber.Ctx) error {
 
 func GetAllPrices(context *fiber.Ctx) error {
 	models := &[]db.Price{}
-	err := db.DB.Find(models).Error
+	err := db.DB.Preload("NomenclatureType").Find(models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
@@ -113,7 +124,7 @@ func GetPrice(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("NomenclatureType").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})

@@ -88,7 +88,7 @@ func DeleteRent(context *fiber.Ctx) error {
 
 func GetAllRents(context *fiber.Ctx) error {
 	models := &[]db.Rent{}
-	err := db.DB.Find(models).Error
+	err := db.DB.Preload("User").Preload("Base").Preload("Product").Find(models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
@@ -113,7 +113,7 @@ func GetRent(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("User").Preload("Base").Preload("Product").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})

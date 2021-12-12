@@ -56,7 +56,6 @@ func UpdateNomenclature(context *fiber.Ctx) error {
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "book has been successfully updated",
-		"id":      id,
 	})
 	return nil
 }
@@ -89,7 +88,7 @@ func DeleteNomenclature(context *fiber.Ctx) error {
 
 func GetAllNomenclatures(context *fiber.Ctx) error {
 	models := &[]db.Nomenclature{}
-	err := db.DB.Find(models).Error
+	err := db.DB.Preload("Type").Find(&models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
@@ -114,7 +113,7 @@ func GetNomenclature(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("Type").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})
@@ -126,4 +125,20 @@ func GetNomenclature(context *fiber.Ctx) error {
 		"data":    model,
 	})
 	return nil
+}
+
+func GetLastNomenclature(context *fiber.Ctx) error {
+	model := &db.Nomenclature{}
+	err := db.DB.Order("id desc").Last(model).Error
+	if err != nil {
+		context.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{"message": "could not get models"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "id gotten successfully",
+		"id":      model.ID,
+	})
+	return nil
+
 }

@@ -84,3 +84,10 @@ type Price struct {
 	Value            int              `json:"value"`
 	NomenclatureType NomenclatureType `gorm:"foreignKey:ID"`
 }
+
+type PriceChange struct {
+	Time     time.Time        `json:"time"`
+	Type     NomenclatureType `gorm:"foreignKey:ID"`
+	OldValue int              `json:"oldvalue"`
+	NewValue int              `json:"newvalue"`
+}

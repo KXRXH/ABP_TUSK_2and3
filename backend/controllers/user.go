@@ -88,7 +88,7 @@ func DeleteUser(context *fiber.Ctx) error {
 
 func GetAllUsers(context *fiber.Ctx) error {
 	models := &[]db.User{}
-	err := db.DB.Find(models).Error
+	err := db.DB.Preload("Status").Find(&models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
@@ -113,7 +113,7 @@ func GetUser(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Where("id = ?", id).First(model).Error
+	err := db.DB.Preload("Status").Where("id = ?", id).First(model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get user"})

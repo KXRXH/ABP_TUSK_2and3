@@ -39,6 +39,7 @@ func (api *ApiInterface) InitApp() {
 	// Nomenclature
 	api.App.Get("/api/nomenclature/", controllers.GetAllNomenclatures)
 	api.App.Get("/api/nomenclature/:id", controllers.GetNomenclature)
+	api.App.Get("/api/nomenclatureId/", controllers.GetLastNomenclature)
 	api.App.Post("/api/nomenclature/", controllers.CreateNomenclature)
 	api.App.Put("/api/nomenclature/:id", controllers.UpdateNomenclature)
 	api.App.Delete("/api/nomenclature/:id", controllers.DeleteNomenclature)
@@ -78,6 +79,10 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/price/", controllers.CreatePrice)
 	api.App.Put("/api/price/:id", controllers.UpdatePrice)
 	api.App.Delete("/api/price/:id", controllers.DeletePrice)
+	// PriceChange
+	api.App.Get("/api/pricechange/", controllers.GetAllPriceChange)
+	api.App.Post("/api/pricechange/", controllers.CreatePriceChange)
+	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange)
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
 }
