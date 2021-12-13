@@ -37,3 +37,32 @@ func Login(c *fiber.Ctx) error {
 		"user":    claim,
 	})
 }
+
+func UserLogin(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	var user db.User
+	db.DB.Where("Login = ?", data["login"]).First(&user)
+	if user.ID == 0 {
+		c.Status(fiber.StatusForbidden)
+		return c.JSON(fiber.Map{
+			"message": false,
+		})
+	}
+	db.DB.Joins("Status", db.DB.Where("Login = ?", data["login"])).First(&user)
+	claim := jwt.MapClaims{
+		"ID":         user.ID,
+		"StatusId":   user.Status.ID,
+		"StatusName": user.Status.Title,
+		"Name":       user.Name,
+		"Surname":    user.Surname,
+		"Lastname":   user.Lastname,
+	}
+	return c.JSON(fiber.Map{
+		"message": true,
+		"user":    claim,
+	})
+
+}

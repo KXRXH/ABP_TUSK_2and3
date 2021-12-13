@@ -31,6 +31,7 @@ type User struct {
 	Lastname string `json:"lastname"`
 	Phone    string `json:"phone"`
 	Mail     string `json:"mail"`
+	Login    string `json:"login"`
 	Birth    string `json:"date"`
 	StatusId int
 	Status   Status `gorm:"foreignKey:StatusId"`

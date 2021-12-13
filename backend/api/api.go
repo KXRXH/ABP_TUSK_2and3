@@ -78,6 +78,7 @@ func (api *ApiInterface) InitApp() {
 	api.App.Delete("/api/pricechange/:id", controllers.DeletePriceChange)
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
+	api.App.Post("/api/user_login/", controllers.UserLogin)
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {
