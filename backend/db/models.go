@@ -35,7 +35,7 @@ type User struct {
 	Birth    string `json:"date"`
 	StatusId int
 	Status   Status `gorm:"foreignKey:StatusId"`
-	Mailing  bool   `json:"mailing"`
+	Mailing  int    `json:"mailing"`
 }
 
 type Employee struct {
@@ -49,7 +49,7 @@ type Employee struct {
 	Login      string `json:"login"`
 	PositionId int
 	Position   Position `gorm:"foreignKey:PositionId"`
-	Mailing    bool     `json:"mailing"`
+	Mailing    int      `json:"mailing"`
 }
 
 type Nomenclature struct {

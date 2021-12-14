@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Form, InputGroup } from 'react-bootstrap'
-import './Mail.css'
+import { Button, Form, InputGroup, Card } from 'react-bootstrap'
+import './forms.css'
 
 const API_ADDRESS = "http://localhost:3001/api/"
 
@@ -29,17 +29,18 @@ export class MailingForm extends Component{
 		})
 	}
 	changeMailing() {
+        console.log(this.state.mailing)
 		fetch(API_ADDRESS + "employee/" + this.props.employee.ID, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json"
 			}, 
 			body: JSON.stringify({
-				"mailing": !this.state.mailing
+				"mailing": this.state.mailing ? 0 : 1
 			})
 		})
 		.then(r => r.json())
-		.then(r=> console.log(r), _=> {})
+		.then(r=> console.log(r), e => {console.log(e)})
 		this.setState({
 			mailing: !this.state.mailing
 		})
@@ -47,9 +48,14 @@ export class MailingForm extends Component{
 	}
 	render() {
 		return (
+            <Card className="form">
 			<Form id="mainform" className="mb-3 Form">
-				<Form.Group className="mb-3" controlId="formBasicEmail">
+                <Card.Header>
 					<Form.Label>Email адрес</Form.Label>
+                </Card.Header>
+                <Card.Body>
+
+				<Form.Group className="mb-3" controlId="formBasicEmail">
 					<Form.Control type="email" placeholder="Введите email" 
 						value={this.state.email}
 						onChange={event => this.changeEmail(event.target.value)}
@@ -66,7 +72,9 @@ export class MailingForm extends Component{
 						</InputGroup.Text>
 					</InputGroup>
 				</Form.Group>
+                </Card.Body>
 			</Form>
-		)
+		</Card>
+        )
 	}
 }

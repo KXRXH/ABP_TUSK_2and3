@@ -26,6 +26,7 @@ export class Login extends Component {
                     alert("Ошибка доступа!")
                     return;
                 }
+                console.log(result.user)
                 this.props.setEmployee(result.user)
             },
 			error => {this.props.setEmployee(null); this.setState({error: true})}

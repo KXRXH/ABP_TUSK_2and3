@@ -105,7 +105,7 @@ export class Note extends Component {
         return {title: "f"}
     }
     Update() {
-        if (this.props.actionIndex === 4 || this.props.actionIndex === 7) {
+        if (this.props.actionIndex === 4 || this.props.actionIndex === 7 || this.props.actionIndex === 8) {
             return;
         } else {
             fetch(REQUEST_PATH[this.props.actionIndex].url)
@@ -147,7 +147,7 @@ export class Note extends Component {
         } else if (this.props.actionIndex === 7) {
             return <Payment date={this.state.date} number="Следующий" />
         } else if (this.props.actionIndex === 8) {
-            return <MailingForm employee={this.state.employee} />;
+            return <MailingForm employee={this.props.employee} />;
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 
         if (this.props.actionIndex === 0) {
