@@ -1,0 +1,41 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.App-flex-btw {
+  display: flex;
+  justify-content: space-between;
+}
+
+.App-brand {
+  display: flex;;
+  flex: 1;
+}
+
+.App-title {
+  font-size: large;
+  padding: 10px;
+}
+
+.App-header-nav {
+  margin-left: 0;
+}
+
+.menu {
+  display: flex;
+  justify-content: left;
+}
+
+.Header {
+  background-color:#94ccff;
+}
