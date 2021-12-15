@@ -8,7 +8,7 @@ export class MailingForm extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			mailing: this.props.employee.Mailing,
+			mailing: this.props.employee.Mailing == 1,
 			email: this.props.employee.Mail,
 		}
 		this.changeMailing = this.changeMailing.bind(this);
@@ -36,7 +36,7 @@ export class MailingForm extends Component{
 				"Content-Type": "application/json"
 			}, 
 			body: JSON.stringify({
-				"mailing": this.state.mailing ? 0 : 1
+				"mailing": this.state.mailing ? "0" : "1" // Здесь надо инвертировать, все ок
 			})
 		})
 		.then(r => r.json())

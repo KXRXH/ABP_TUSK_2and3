@@ -9,7 +9,7 @@ export class Lk extends Component{
 		super(props);
 		console.log(this.props.user)
 		this.state = {
-			mailing: this.props.user.Mailing,
+			mailing: this.props.user.Mailing == 1,
 			email: this.props.user.Mail,
 		}
 		this.changeMailing = this.changeMailing.bind(this);
@@ -36,7 +36,7 @@ export class Lk extends Component{
 				"Content-Type": "application/json"
 			}, 
 			body: JSON.stringify({
-				"mailing": !this.state.mailing
+				"mailing": this.state.mailing ? "0" : "1"
 			})
 		})
 		.then(r => r.json())
