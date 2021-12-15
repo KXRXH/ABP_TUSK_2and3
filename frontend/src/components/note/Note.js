@@ -97,14 +97,22 @@ export class Note extends Component {
                 <td>{this.getTypeById(row.type_id).title}</td>
             </tr>)
         }
+        if (this.props.actionIndex === 9 || this.props.actionIndex === 10) {
+            return this.state.data.map(row => <tr>
+                <td>{row.User ? row.User.surname + " " + row.User.name + " " + row.User.lastname : null}</td>
+                <td>{row.Base ? row.Base.name : null}</td>
+                <td>{row.Product ? row.Product.name : null}</td>
+                <td>{row.time ? row.time.split('T')[0] : null}</td>
+            </tr>)
        	}
+    }
     getTypeById(id) {
         for (let k = 0; k < this.state.types.length; ++k) {
             if (this.state.types[k].id == id) {
                 return this.state.types[k];
             }
         }
-        return {title: "f"}
+        return {title: ""}
     }
     Update() {
         if (this.props.actionIndex === 4 || this.props.actionIndex === 7 || this.props.actionIndex === 8) {

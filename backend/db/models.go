@@ -85,7 +85,7 @@ type Base struct {
 
 type Rent struct {
 	ID        int       `json:"id"`
-	Time      time.Time `json:"finish"`
+	Time      time.Time `json:"time"`
 	UserId    int
 	User      User `gorm:"foreignKey:UserId"`
 	BaseId    int

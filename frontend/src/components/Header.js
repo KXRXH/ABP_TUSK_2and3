@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap'
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import {UserTitle} from './user/UserTitle.js'
 import '../App.css'
 
@@ -30,6 +30,8 @@ const Header = props => {
 					<NavDropdown.Item onClick={() => props.callNote(1)}>Тарифы</NavDropdown.Item>
 					<NavDropdown.Item onClick={() => props.callNote(6)}>Изменения тарифов</NavDropdown.Item>
 					<NavDropdown.Item onClick={() => props.callNote(5)}>Оплата</NavDropdown.Item>
+					<NavDropdown.Item onClick={() => props.callNote(9)}>Начало аренды</NavDropdown.Item>
+					<NavDropdown.Item onClick={() => props.callNote(10)}>Конец аренды</NavDropdown.Item>
 					{(props.position === 3 || props.position === 1) ? <NavDropdown.Item 
 									onClick={() => props.callNote(7)}>Добавить оплату</NavDropdown.Item> 
 							: null}
