@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import { Button, Table } from 'react-bootstrap';
-import {API_ADDRESS, REQUEST_PATH, getDate} from '../../constants.js'
+import {API_ADDRESS, REQUEST_PATH, getDate, ADMIN, MANAGER, OPERATOR, MASTER, NOMENCLATURE} from '../../constants.js'
 import { Nomenclature } from '../forms/Nomenclature.js';
 import { Tariff } from '../forms/Tariff.js';
 import { Payment } from '../forms/Payment.js';
 import { MailingForm } from '../forms/MailingForm.js';
+import { UsedCheckbox } from './UsedCheckbox.js';
 
 const dateDelayOk = time => {
     let old = new Date(time);
@@ -28,20 +29,21 @@ export class Note extends Component {
             date: d.toISOString().split('T')[0],
         };
         this.getTypes();
-        setInterval(() => this.Update(), 2000);
+        setInterval(() => this.Update(), 1500);
     }
 	getTable() {
-		if (this.props.actionIndex === 0) // Номенклатура
+		if (this.props.actionIndex === NOMENCLATURE) // Номенклатура
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td><td>{row.name}</td>
 				<td>{row.Type ? row.Type.title : ""}</td>
 				<td>{row.used ? "Да" : "Нет"}</td>
 				<td>{getDate(row.start)}</td><td>{getDate(row.finish)}</td>
-                {this.props.position < 3 ? 
+                {this.props.position < OPERATOR ? <td><UsedCheckbox value={row.used} id={row.id}/></td> : null }
+                {this.props.position < OPERATOR ? 
                     <td><Button onClick={() => this.props.changeNomenclature(row)}>Изменить</Button></td> 
                     : null
                 }
-                {this.props.position === 1 ? 
+                {this.props.position === ADMIN ? 
                     <td><Button onClick={() => (window.confirm('Delete the item?')) ? this.props.deleteNomenclature(row.id) 
                     : null}>Удалить</Button></td> 
                     : null
@@ -52,7 +54,7 @@ export class Note extends Component {
 			return this.state.data.map(row => <tr>
                 <td>{row.title}</td>
                 <td>{row.price}</td>
-                {(this.props.position < 3 && dateDelayOk(row.time)) ? <td><Button 
+                {(this.props.position < OPERATOR && dateDelayOk(row.time)) ? <td><Button 
                         onClick={() => this.setState({tariffID: row.id, tariff: row})}>Изменить</Button></td> : null}
             </tr>)
 		}
@@ -151,14 +153,15 @@ export class Note extends Component {
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 
         if (this.props.actionIndex === 0) {
-            if (this.props.position < 3) {
+            if (this.props.position < OPERATOR) {
+                titles.push(<th>Используется</th>);
                 titles.push(<th>Изменить</th>);
-                if (this.props.position === 1) {
+                if (this.props.position === ADMIN) {
                     titles.push(<th>Удалить</th>);
                 }
             }
         } else if (this.props.actionIndex === 1) {
-            if (this.props.position < 3) {
+            if (this.props.position < OPERATOR) {
                 titles.push(<th>Изменить</th>)
             }
         }

@@ -47,4 +47,12 @@ const getDate = (date_string) => {
     let date = new Date(date_string);
     return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'});
 }
-export {API_ADDRESS, REQUEST_PATH, getDate}
+
+const ADMIN = 1;
+const MANAGER = 2;
+const OPERATOR = 3;
+const MASTER = 4;
+
+const NOMENCLATURE = 0;
+export {API_ADDRESS, REQUEST_PATH, getDate, ADMIN, MANAGER, OPERATOR, MASTER}
+export {NOMENCLATURE}

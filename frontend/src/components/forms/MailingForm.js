@@ -29,7 +29,6 @@ export class MailingForm extends Component{
 		})
 	}
 	changeMailing() {
-        console.log(this.state.mailing)
 		fetch(API_ADDRESS + "employee/" + this.props.employee.ID, {
 			method: "PUT",
 			headers: {
