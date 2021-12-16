@@ -36,7 +36,7 @@ func CreateRent(ctx *fiber.Ctx) error {
 
 		dif := model.Time.Sub(modelf.Time).Minutes()
 
-		umodel := db.User{RentTime: (int(dif) + v_model.RentTime)}
+		umodel := db.User{RentTime: (int(dif) + v_model.RentTime), RentCount: v_model.RentCount + 1}
 		err = db.DB.Model(&umodel).Where("id = ?", model.UserId).Updates(&umodel).Error
 		if err != nil {
 			ctx.Status(http.StatusBadRequest).JSON(&fiber.Map{

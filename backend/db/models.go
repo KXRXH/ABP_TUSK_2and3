@@ -25,18 +25,19 @@ type NomenclatureType struct {
 }
 
 type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Surname  string `json:"surname"`
-	Lastname string `json:"lastname"`
-	Phone    string `json:"phone"`
-	Mail     string `json:"mail"`
-	Login    string `json:"login"`
-	Birth    string `json:"date"`
-	StatusId int
-	Status   Status `gorm:"foreignKey:StatusId"`
-	Mailing  string `json:"mailing"`
-	RentTime int    `json:"rent_time"`
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Surname   string `json:"surname"`
+	Lastname  string `json:"lastname"`
+	Phone     string `json:"phone"`
+	Mail      string `json:"mail"`
+	Login     string `json:"login"`
+	Birth     string `json:"date"`
+	StatusId  int
+	Status    Status `gorm:"foreignKey:StatusId"`
+	Mailing   string `json:"mailing"`
+	RentTime  int    `json:"rent_time"`
+	RentCount int    `json:"count"`
 }
 
 type Employee struct {
@@ -63,6 +64,8 @@ type Nomenclature struct {
 	InUse      string    `json:"in_use"`
 	TypeId     int
 	Type       NomenclatureType `gorm:"foreignKey:TypeId"`
+	UserID     int
+	CurrUser   User `gorm:"foreignKey:UserID"`
 }
 
 type Payment struct {

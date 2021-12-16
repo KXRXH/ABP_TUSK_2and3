@@ -10,7 +10,7 @@ import (
 	mail "github.com/xhit/go-simple-mail"
 )
 
-const PASSWORD = `...` // PASSWORD HERE
+const PASSWORD = `ra8ASWNCz7B9bWLX4nc6` // PASSWORD HERE
 
 func SendCheque(c *fiber.Ctx) error {
 	var values pdfc.ValuesForTable
@@ -180,12 +180,17 @@ func GetDataForStatistic(context *fiber.Ctx) (pdfc.ValuesForStatistic, error) {
 			&fiber.Map{"message": "could not get models"})
 		return pdfc.ValuesForStatistic{}, err
 	}
+	avg_rent := 0.0
+	for _, v := range user_model {
+		avg_rent += float64(v.RentTime)
+	}
 	numOfUsers := len(user_model)
+	avg_rent = float64(avg_rent) / float64(numOfUsers)
 	return pdfc.ValuesForStatistic{
 		NumOfUsers:        numOfUsers,
 		NumOfProducts:     numOfNomenclatures,
 		NumOfUsedProducts: numOfUsedNomenclatures,
-		AvgRentT:          10.1,
+		AvgRentT:          avg_rent,
 	}, nil
 
 }
