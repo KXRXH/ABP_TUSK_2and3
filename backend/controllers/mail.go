@@ -8,7 +8,7 @@ import (
 )
 
 func SendCheque(c *fiber.Ctx) error {
-	values := pdfc.ValuesForTable{}
+	var values pdfc.ValuesForTable
 	err := c.BodyParser(&values)
 	if err != nil {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
