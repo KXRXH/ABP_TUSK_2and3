@@ -3,6 +3,7 @@ package controllers
 import (
 	"dblib/db"
 	"dblib/pdfc"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -68,7 +69,16 @@ func SendAdminStatistic(c *fiber.Ctx) error {
 		})
 		return err
 	}
-	err = SendStatisticToEmail(value.Email)
+	modelf := db.Employee{}
+	err = db.DB.Where("mail = ?", value.Email).Last(&modelf).Error
+	if err != nil {
+		c.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{"message": "could not get finish rent"},
+		)
+		return err
+	}
+	fullName := fmt.Sprintf("%s %s %s", modelf.Surname, modelf.Name, modelf.Lastname)
+	err = SendStatisticToEmail(fullName, value.Email)
 	if err != nil {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "Cant send message to user", "ErrorInfo": err.Error()})
 		return err
@@ -78,7 +88,7 @@ func SendAdminStatistic(c *fiber.Ctx) error {
 }
 
 //--------------------------------------------------------------//
-func SendStatisticToEmail(user_email string) error {
+func SendStatisticToEmail(user_name, user_email string) error {
 	moscow, _ := time.LoadLocation("Europe/Moscow")
 	currDateT := time.Now().In(moscow).Format("02.01.2006 15:04:05")
 	var htmlBody = `
@@ -87,8 +97,11 @@ func SendStatisticToEmail(user_email string) error {
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-	<h1>Отчёт о работе системы аренды</h1>
-	<p>Отчёт от ` + currDateT + `</p>
+	<h1 align=center>Письмо администратору</h1>
+	<p>Добрый день, ` + user_name + `!</p>
+	<p>Сегодня (` + currDateT + ` МСК) вы запросили отчёт
+	о работе системы на сегодняшнее число.
+	Во вложении письмо в формате .pdf.</p>
 	</body>
 	`
 	server := mail.NewSMTPClient()
@@ -118,15 +131,20 @@ func SendStatisticToEmail(user_email string) error {
 	return nil
 }
 
+// TODO !!!!
 func SendChequeToEmail(user_email, user_name string) error {
+	moscow, _ := time.LoadLocation("Europe/Moscow")
+	currDateT := time.Now().In(moscow).Format("02.01.2006 15:04:05")
 	var htmlBody = `
 	<html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-	<h1>Здравствуйте, ` + user_name + `</h1>
-	<h2>Спасибо за то, что пользуетесь услугами комании КОТЭ</h2>
+	<h1>Письмо ` + user_name + `.</h1>
+	<p>Сегодня (` + currDateT + ` МСК) вы
+	взяли в аренду товар 
+	Во вложении письмо в формате .pdf.</p>
 	</body>
 	`
 	server := mail.NewSMTPClient()
