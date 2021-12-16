@@ -88,11 +88,11 @@ type Base struct {
 type Rent struct {
 	ID        int       `json:"id"`
 	Time      time.Time `json:"time"`
-	UserId    int
-	User      User `gorm:"foreignKey:UserId"`
+	UserId    int       `json:"user_id"`
+	User      User      `gorm:"foreignKey:UserId"`
 	BaseId    int
-	Base      Base `gorm:"foreignKey:BaseId"`
-	ProductId int
+	Base      Base         `gorm:"foreignKey:BaseId"`
+	ProductId int          `json:"product_id"`
 	Product   Nomenclature `gorm:"foreignKey:ProductId"`
 	IsStart   bool         `json:"is_start"` // is it rent start or rent finished?
 }
