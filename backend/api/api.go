@@ -81,6 +81,8 @@ func (api *ApiInterface) InitApp() {
 	// Login
 	api.App.Post("/api/login/", controllers.Login)
 	api.App.Post("/api/user_login/", controllers.UserLogin)
+	// Mailing
+	api.App.Post("/api/cheque", controllers.SendCheque)
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {

@@ -33,7 +33,8 @@ func CreateReport(values ValuesForTable) error {
 	tr := pdf.UnicodeTranslatorFromDescriptor("./src/cp1251")
 
 	pdf.SetFont("Helvetica", "", fontHt-4)
-	pdf.CellFormat(0, 0, tr(fmt.Sprintf(`Чек по операции аренда товара "%s", артикул "%s"`, values.NName, values.Article)), "0", 0, "TC", false, 0, "")
+	pdf.CellFormat(0, 0, tr(fmt.Sprintf(`Чек по операции аренда товара "%s", артикул "%s"`,
+		values.NName, values.Article)), "0", 0, "TC", false, 0, "")
 
 	pdf.SetFont("Helvetica", "", fontHt-5)
 	pdf.SetY(30)
@@ -70,13 +71,15 @@ func CreateReport(values ValuesForTable) error {
 	pdf.SetFont("Helvetica", "", fontHt-7)
 	// КАРТИНКА
 	pdf.CellFormat(float64(cellWd), cellHt, tr("Подпись Ген Директора"), "0", 0, "BL", false, 0, "")
-	pdf.Image("Факсимиле.png", float64(margin+20)+float64(1)*float64(cellWd), float64(margin+45)+float64(9)*cellHt, 0, 0, false, "", 0, "")
+	pdf.Image("./src/Факсимиле.png", float64(margin+20)+float64(1)*float64(cellWd),
+		float64(margin+45)+float64(9)*cellHt, 0, 0, false, "", 0, "")
 	// ТЕКСТ
 	pdf.SetXY(float64(margin-5)+float64(0)*float64(cellWd), float64(margin+45)+float64(10)*cellHt)
 	pdf.SetFont("Helvetica", "", fontHt-7)
 	pdf.CellFormat(float64(cellWd), cellHt, tr("Печать"), "0", 0, "BL", false, 0, "")
 	// КАРТИНКА
-	pdf.Image("Печать.png", float64(margin+15)+float64(1.5)*float64(cellWd), float64(margin+40)+float64(8)*cellHt, 50, 50, false, "", 0, "")
+	pdf.Image("./src/Печать.png", float64(margin+15)+float64(1.5)*float64(cellWd),
+		float64(margin+40)+float64(8)*cellHt, 50, 50, false, "", 0, "")
 
 	if err := pdf.OutputFileAndClose("test.pdf"); err != nil {
 		return err

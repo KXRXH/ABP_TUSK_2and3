@@ -36,7 +36,6 @@ export class Note extends Component {
 			return this.state.data.map(row => <tr>
 				<td>{row.code}</td><td>{row.name}</td>
 				<td>{row.Type ? row.Type.title : ""}</td>
-				<td>{row.used ? "Да" : "Нет"}</td>
 				<td>{getDate(row.start)}</td><td>{getDate(row.finish)}</td>
                 {this.props.position < OPERATOR ? <td><UsedCheckbox value={row.used} id={row.id}/></td> : null }
                 {this.props.position < OPERATOR ? 
