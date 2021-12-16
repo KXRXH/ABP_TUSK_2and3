@@ -79,7 +79,7 @@ func CreateReport(values ValuesForTable) error {
 	pdf.Image("./src/Печать.png", float64(margin+15)+float64(1.5)*float64(cellWd),
 		float64(margin+40)+float64(8)*cellHt, 50, 50, false, "", 0, "")
 
-	if err := pdf.OutputFileAndClose("cheque.pdf"); err != nil {
+	if err := pdf.OutputFileAndClose("./temp/cheque.pdf"); err != nil {
 		return err
 	}
 	return nil
