@@ -37,7 +37,8 @@ export class Note extends Component {
 				<td>{row.code}</td><td>{row.name}</td>
 				<td>{row.Type ? row.Type.title : ""}</td>
 				<td>{getDate(row.start)}</td><td>{getDate(row.finish)}</td>
-                {this.props.position < OPERATOR ? <td><UsedCheckbox value={row.used} id={row.id}/></td> : null }
+                <td><UsedCheckbox columnIsUsed={false} value={row.is_used} id={row.id}/></td>
+                {this.props.position < OPERATOR ? <td><UsedCheckbox columnIsUsed={true} value={row.used} id={row.id}/></td> : null }
                 {this.props.position < OPERATOR ? 
                     <td><Button onClick={() => this.props.changeNomenclature(row)}>Изменить</Button></td> 
                     : null
@@ -160,8 +161,9 @@ export class Note extends Component {
         }
         let titles = this.state.titles.map(value => <th>{value}</th>) 
         if (this.props.actionIndex === 0) {
+            if (this.props.position <= OPERATOR)
+                titles.push(<th>Эксплуатируется</th>);
             if (this.props.position < OPERATOR) {
-                titles.push(<th>Используется</th>);
                 titles.push(<th>Изменить</th>);
                 if (this.props.position === ADMIN) {
                     titles.push(<th>Удалить</th>);

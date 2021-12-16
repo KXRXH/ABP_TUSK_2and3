@@ -11,14 +11,15 @@ export class UsedCheckbox extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
     handleChange() {
+        const body = (this.props.columnIsUsed) ? 
+            JSON.stringify({"used": this.state.value ? "0" : "1"}) 
+            : JSON.stringify({"is_used": this.state.value ? "0" : "1"})
         fetch(API_ADDRESS + "nomenclature/" + this.props.id, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json"
 			}, 
-			body: JSON.stringify({
-				"used": this.state.value ? "0" : "1" // Здесь надо инвертировать, все ок
-			})
+			body: body,
 		})
 		.then(r => r.json())
 		.then(r=> console.log(r), e => {console.log(e)})

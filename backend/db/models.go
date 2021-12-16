@@ -36,6 +36,7 @@ type User struct {
 	StatusId int
 	Status   Status `gorm:"foreignKey:StatusId"`
 	Mailing  string `json:"mailing"`
+	RentTime int    `json:"rent_time"`
 }
 
 type Employee struct {
@@ -59,6 +60,7 @@ type Nomenclature struct {
 	FinishDate time.Time `json:"finish"`
 	Name       string    `json:"name"`
 	Used       string    `json:"used"`
+	InUse      string    `json:"in_use"`
 	TypeId     int
 	Type       NomenclatureType `gorm:"foreignKey:TypeId"`
 }

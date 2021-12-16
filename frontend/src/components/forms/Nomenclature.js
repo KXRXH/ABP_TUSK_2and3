@@ -57,7 +57,7 @@ export class Nomenclature extends Component {
                 body: JSON.stringify({
                     "code": this.state.code,
                     "name": this.state.name,
-                    "used": true,
+                    "used": "1",
                     "Type": {
                         "id": this.state.typeId - 0,
                         "title": this.getType(this.state.typeId - 0)

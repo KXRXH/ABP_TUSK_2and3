@@ -7,7 +7,6 @@ const API_ADDRESS = "http://localhost:3001/api/"
 export class Lk extends Component{
 	constructor(props) {
 		super(props);
-		console.log(this.props.user)
 		this.state = {
 			mailing: this.props.user.Mailing == 1,
 			email: this.props.user.Mail,
