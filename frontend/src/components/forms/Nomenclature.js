@@ -58,6 +58,7 @@ export class Nomenclature extends Component {
                     "code": this.state.code,
                     "name": this.state.name,
                     "used": "1",
+                    "in_use": "0",
                     "Type": {
                         "id": this.state.typeId - 0,
                         "title": this.getType(this.state.typeId - 0)

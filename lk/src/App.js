@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import { Login } from './Login.js'
 import { Lk } from './Lk.js'
-import { Header } from './components/Header.js'
+import Header from './components/Header.js'
+import { Nomenclature } from './components/Nomenclature.js'
+import { NOMENCLATURE_TAB, MY_TAB } from './constants.js'
 import './App.css';
 
 const API_ADDRESS = "http://localhost:3001/api/"
@@ -13,6 +15,7 @@ class App extends Component {
 		super(props);
 			this.state = {
 			user: null,
+			currentTab: NOMENCLATURE_TAB,
 		}
 		this.setUser = this.setUser.bind(this)
 	}
@@ -32,15 +35,25 @@ class App extends Component {
 			}
 		)
 	}
+	openTab(tabIndex) {
+		this.setState({
+			currentTab: tabIndex
+		})
+	}
 	render() {
+		if (this.state.user == null) {
+			return <Login setUser={this.setUser} />
+		}
+		let bdy;
+		if (this.state.currentTab === NOMENCLATURE_TAB) {
+			bdy = <Nomenclature className="Form"/>
+		} else {
+		}
 		return (
-		<div className="App">
-			{
-			(this.state.user == null) ? 
-				<Login setUser={this.setUser} />
-				: <Header user={this.state.user}/> //<Lk user={this.state.user} />
-			}
-		</div>
+			<div>
+				<Header user={this.state.user} openTab={this.openTab.bind(this)} /> 
+				{bdy}
+			</div>
 		);
 	}
 }

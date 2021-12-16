@@ -125,6 +125,22 @@ func GetNomenclature(context *fiber.Ctx) error {
 	return nil
 }
 
+func GetNotUsed(ctx *fiber.Ctx) error {
+	models := &[]db.Nomenclature{}
+	err := db.DB.Preload("Type").Where("used = ?", "1").Where("in_use = ?", "0").Find(&models).Error
+	if err != nil {
+		ctx.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{"message": "could not get models"})
+		return err
+	}
+	ctx.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "users gotten successfully",
+		"data":    models,
+	})
+	return nil
+
+}
+
 func GetLastNomenclature(context *fiber.Ctx) error {
 	model := db.Nomenclature{}
 	err := db.DB.Order("id desc").Last(&model).Error
