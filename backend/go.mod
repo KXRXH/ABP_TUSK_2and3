@@ -13,6 +13,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/sirupsen/logrus v1.8.1
+	github.com/xhit/go-simple-mail v2.2.2+incompatible
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.22.4
 )
