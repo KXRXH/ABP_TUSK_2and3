@@ -10,3 +10,10 @@ type ValuesForTable struct {
 	Sum     int    `json:"sum"`
 	Dis     int    `json:"discount"`
 }
+
+type ValuesForStatistic struct {
+	NumOfUsers        int
+	NumOfProducts     int
+	NumOfUsedProducts int
+	AvgRentT          float64
+}
