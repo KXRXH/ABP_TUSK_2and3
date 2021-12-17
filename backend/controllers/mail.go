@@ -289,17 +289,22 @@ func GetDataForStatistic(context *fiber.Ctx) (pdfc.ValuesForStatistic, error) {
 			&fiber.Map{"message": "could not get models"})
 		return pdfc.ValuesForStatistic{}, err
 	}
-	avg_rent := 0.0
+	avgRent := 0.0
+	rentCount := 0.0
 	for _, v := range user_model {
-		avg_rent += float64(v.RentTime)
+		avgRent += float64(v.RentTime)
+	}
+
+	for _, v := range user_model {
+		rentCount += float64(v.RentCount)
 	}
 	numOfUsers := len(user_model)
-	avg_rent = float64(avg_rent) / float64(numOfUsers)
+	avgRent = avgRent / rentCount
 	return pdfc.ValuesForStatistic{
 		NumOfUsers:        numOfUsers,
 		NumOfProducts:     numOfNomenclatures,
 		NumOfUsedProducts: numOfUsedNomenclatures,
-		AvgRentT:          avg_rent,
+		AvgRentT:          avgRent,
 	}, nil
 
 }
