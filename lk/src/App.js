@@ -4,7 +4,7 @@ import { Login } from './Login.js'
 import { Lk } from './Lk.js'
 import Header from './components/Header.js'
 import { Nomenclature } from './components/Nomenclature.js'
-import { NOMENCLATURE_TAB, MY_TAB } from './constants.js'
+import { NOMENCLATURE_TAB, MY_TAB, USER_TAB } from './constants.js'
 import './App.css';
 import { UserData } from './components/UserData';
 
@@ -16,7 +16,7 @@ class App extends Component {
 		super(props);
 			this.state = {
 			user: null,
-			currentTab: NOMENCLATURE_TAB,
+			currentTab: USER_TAB,
 		}
 		this.setUser = this.setUser.bind(this)
 	}
