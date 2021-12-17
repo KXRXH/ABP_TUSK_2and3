@@ -110,7 +110,7 @@ func SendStatisticToEmail(user_name, user_email string) error {
 	<h1 align=center>Письмо администратору</h1>
 	<p>Добрый день, ` + user_name + `!</p>
 	<p>Сегодня (` + currDateT + ` МСК) вы запросили отчёт
-	о работе системы на сегодняшнее число.
+	о работе системы на сегодняшнее число.<br>
 	Во вложении письмо в формате .pdf.</p>
 	</body>
 	`
