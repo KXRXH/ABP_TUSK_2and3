@@ -5,6 +5,7 @@ import (
 	"dblib/pdfc"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,14 +23,22 @@ func SendCheque(c *fiber.Ctx) error {
 		})
 		return err
 	}
-	err = pdfc.CreateReport(values)
-	if err != nil {
-		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "Cant create report"})
+	var model db.NomenclatureType
+	if err := db.DB.Model(&model).Where("code = ?", values.Article).Updates(&model).Error; err != nil {
+		c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "could not update user (update error)",
+		})
 		return err
 	}
-	err = SendChequeToEmail(values.UMail, values.FIO)
+	tariff := strconv.Itoa(model.Price)
+	err = pdfc.CreateReport(values)
 	if err != nil {
-		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "Cant send message to user", "ErrorInfo": err.Error()})
+		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not create report"})
+		return err
+	}
+	err = SendChequeToEmail(values, tariff)
+	if err != nil {
+		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not send message to user", "ErrorInfo": err.Error()})
 		return err
 	}
 	c.Status(http.StatusOK).JSON(&fiber.Map{"message": "OK"})
@@ -131,8 +140,7 @@ func SendStatisticToEmail(user_name, user_email string) error {
 	return nil
 }
 
-// TODO !!!!
-func SendChequeToEmail(user_email, user_name string) error {
+func SendChequeToEmail(info pdfc.ValuesForTable, tariff string) error {
 	moscow, _ := time.LoadLocation("Europe/Moscow")
 	currDateT := time.Now().In(moscow).Format("02.01.2006 15:04:05")
 	var htmlBody = `
@@ -141,10 +149,13 @@ func SendChequeToEmail(user_email, user_name string) error {
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-	<h1>Письмо ` + user_name + `.</h1>
+	<h1>Письмо ` + info.FIO + `.</h1>
 	<p>Сегодня (` + currDateT + ` МСК) вы
-	взяли в аренду товар 
-	Во вложении письмо в формате .pdf.</p>
+	взяли в аренду товар "` + info.NName + `",
+	артикул - ` + info.Article + `.</p>
+	<p>Тариф - ` + tariff + ` за минуту. Ваша скидка Пользователя - ` + strconv.Itoa(info.Dis) + `%</p>
+	<p>Приятного использования!
+	С уважением, компания КОТЭ.</p>
 	</body>
 	`
 	server := mail.NewSMTPClient()
@@ -163,7 +174,7 @@ func SendChequeToEmail(user_email, user_name string) error {
 
 	email := mail.NewMSG()
 	email.SetFrom(`ООО "КОТЭ" <ooo-kote@mail.ru>`)
-	email.AddTo(user_email)
+	email.AddTo(info.UMail)
 	email.SetSubject("Чек по операции аренда товара")
 	email.AddAttachment("cheque.pdf")
 	email.SetBody(mail.TextHTML, htmlBody)
