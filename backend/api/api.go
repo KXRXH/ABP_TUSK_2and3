@@ -39,6 +39,7 @@ func (api *ApiInterface) InitApp() {
 	// Nomenclature
 	api.App.Get("/api/nomenclature/", controllers.GetAllNomenclatures)
 	api.App.Get("/api/nomenclature/:id", controllers.GetNomenclature)
+	api.App.Get("/api/nomenclature_user/:id", controllers.NomenclatureForUser)
 	api.App.Get("/api/nomenclatureId/", controllers.GetLastNomenclature)
 	api.App.Post("/api/nomenclature/", controllers.CreateNomenclature)
 	api.App.Put("/api/nomenclature/:id", controllers.UpdateNomenclature)
