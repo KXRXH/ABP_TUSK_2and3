@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"dblib/db"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -15,6 +17,19 @@ func CreateRent(ctx *fiber.Ctx) error {
 			&fiber.Map{"message": "request failed"},
 		)
 		return err
+	}
+	nulltime := time.Time{}
+	if model.Time == nulltime {
+		moscow, _ := time.LoadLocation("Europe/Moscow")
+		currDateT := time.Now().In(moscow)
+		model_custom := db.Rent{Time: currDateT}
+		err := db.DB.Model(&model).Where("id = ?", model.UserId).Updates(&model_custom).Error
+		if err != nil {
+			ctx.Status(http.StatusBadRequest).JSON(
+				&fiber.Map{"message": "curr time error"},
+			)
+			return err
+		}
 	}
 	if !model.IsStart {
 		// GETTING RENT_START
@@ -37,7 +52,9 @@ func CreateRent(ctx *fiber.Ctx) error {
 		// COUNTING LEN` OF LAST RENT
 		dif := model.Time.Sub(modelf.Time).Minutes()
 		// ADDING MINUTES TO USER STATS
-		umodel := db.User{RentTime: (int(dif) + v_model.RentTime), RentCount: v_model.RentCount + 1}
+		timeOFRent := dif + float64(v_model.RentTime)
+		fmt.Println(dif)
+		umodel := db.User{RentTime: int(timeOFRent), RentCount: v_model.RentCount + 1}
 		err = db.DB.Model(&umodel).Where("id = ?", model.UserId).Updates(&umodel).Error
 		if err != nil {
 			ctx.Status(http.StatusBadRequest).JSON(&fiber.Map{
