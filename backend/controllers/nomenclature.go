@@ -86,7 +86,7 @@ func DeleteNomenclature(context *fiber.Ctx) error {
 
 func GetAllNomenclatures(context *fiber.Ctx) error {
 	models := &[]db.Nomenclature{}
-	err := db.DB.Preload("Type").Find(&models).Error
+	err := db.DB.Preload("Type").Preload("CurrUser").Find(&models).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not get models"})
@@ -111,10 +111,10 @@ func GetNomenclature(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := db.DB.Preload("Type").Where("id = ?", id).First(&model).Error
+	err := db.DB.Preload("Type").Preload("CurrUser").Where("id = ?", id).First(&model).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(
-			&fiber.Map{"message": "could not get user"})
+			&fiber.Map{"message": "could not get nomenclature"})
 		return err
 	}
 
@@ -139,4 +139,28 @@ func GetLastNomenclature(context *fiber.Ctx) error {
 	})
 	return nil
 
+}
+
+func NomenclatureForUser(context *fiber.Ctx) error {
+	id := context.Params("id")
+	if id == "" {
+		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+			"message": "id cannot be empty",
+		})
+		return nil
+	}
+	models := []db.Nomenclature{}
+	err := db.DB.Preload("Type").Preload("CurrUser").Where("user_id = ?", id).Find(&models).Error
+	if err != nil {
+		if err != nil {
+			context.Status(http.StatusBadRequest).JSON(
+				&fiber.Map{"message": "could not get nomenclature"})
+			return err
+		}
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "nomenclatures of user were gotten successfully",
+		"data":    models,
+	})
+	return nil
 }

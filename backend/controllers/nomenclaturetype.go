@@ -50,14 +50,13 @@ func UpdateNomenclatureType(context *fiber.Ctx) error {
 
 	db.DB.Model(&oldModel).Where("id = ?", id).First(&oldModel)
 
-	pcModel := db.PriceChange{}
 	if err := db.DB.Model(&model).Where("id = ?", id).Updates(&model).Error; err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "could not update user (update error)",
 		})
 		return err
 	}
-	if err := CreatePriceChange(oldModel.Price, model.Price, model.ID); err != nil {
+	if err := CreatePriceChange(oldModel.Price, model.Price, oldModel.ID); err != nil {
 		context.Status(http.StatusOK).JSON(&fiber.Map{
 			"message": "price change error",
 		})
@@ -65,7 +64,6 @@ func UpdateNomenclatureType(context *fiber.Ctx) error {
 	}
 	context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "book has been successfully updated",
-		"model":   pcModel,
 	})
 	return nil
 }
