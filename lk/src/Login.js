@@ -24,7 +24,6 @@ export class Login extends Component{
 				result => {
 					// Check success login
 					if (!result.message) {
-						this.props.setUser(null);
 						alert("Ошибка доступа!")
 						return;
 					}
