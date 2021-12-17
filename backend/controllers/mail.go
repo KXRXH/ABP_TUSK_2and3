@@ -23,14 +23,15 @@ func SendCheque(c *fiber.Ctx) error {
 		})
 		return err
 	}
-	var model db.NomenclatureType
-	if err := db.DB.Model(&model).Where("code = ?", values.Article).Updates(&model).Error; err != nil {
+	var model db.Nomenclature
+	if err := db.DB.Model(&model).Preload("Type").Where("Article = ?", values.Article).First(&model).Error; err != nil {
 		c.Status(http.StatusBadRequest).JSON(&fiber.Map{
-			"message": "could not update user (update error)",
+			"message": "could not get tariff",
 		})
 		return err
 	}
-	tariff := strconv.Itoa(model.Price)
+	fmt.Println(model)
+	tariff := strconv.Itoa(model.Type.Price)
 	err = pdfc.CreateReport(values)
 	if err != nil {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not create report"})
