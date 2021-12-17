@@ -14,7 +14,7 @@ import (
 
 const PASSWORD = `ra8ASWNCz7B9bWLX4nc6` // PASSWORD HERE
 
-func SendCheque(c *fiber.Ctx) error {
+func SendStart(c *fiber.Ctx) error {
 	var values pdfc.ValuesForTable
 	err := c.BodyParser(&values)
 	if err != nil {
@@ -37,7 +37,39 @@ func SendCheque(c *fiber.Ctx) error {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not create report"})
 		return err
 	}
-	err = SendChequeToEmail(values, tariff)
+	err = SendRentStartToEmail(values, tariff)
+	if err != nil {
+		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not send message to user", "ErrorInfo": err.Error()})
+		return err
+	}
+	c.Status(http.StatusOK).JSON(&fiber.Map{"message": "OK"})
+	return nil
+}
+
+func SendFinish(c *fiber.Ctx) error {
+	var values pdfc.ValuesForTable
+	err := c.BodyParser(&values)
+	if err != nil {
+		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
+			"message": "cant parse model",
+		})
+		return err
+	}
+	var model db.Nomenclature
+	if err := db.DB.Model(&model).Preload("Type").Where("Article = ?", values.Article).First(&model).Error; err != nil {
+		c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "could not get tariff",
+		})
+		return err
+	}
+	fmt.Println(model)
+	tariff := strconv.Itoa(model.Type.Price)
+	err = pdfc.CreateReport(values)
+	if err != nil {
+		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not create report"})
+		return err
+	}
+	err = SendRentFinishToEmail(values, tariff)
 	if err != nil {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not send message to user", "ErrorInfo": err.Error()})
 		return err
@@ -141,7 +173,7 @@ func SendStatisticToEmail(user_name, user_email string) error {
 	return nil
 }
 
-func SendChequeToEmail(info pdfc.ValuesForTable, tariff string) error {
+func SendRentStartToEmail(info pdfc.ValuesForTable, tariff string) error {
 	moscow, _ := time.LoadLocation("Europe/Moscow")
 	currDateT := time.Now().In(moscow).Format("02.01.2006 15:04:05")
 	var htmlBody = `
@@ -176,7 +208,52 @@ func SendChequeToEmail(info pdfc.ValuesForTable, tariff string) error {
 	email := mail.NewMSG()
 	email.SetFrom(`ООО "КОТЭ" <ooo-kote@mail.ru>`)
 	email.AddTo(info.UMail)
-	email.SetSubject("Чек по операции аренда товара")
+	email.SetSubject("Начало аренды товара.")
+	email.SetBody(mail.TextHTML, htmlBody)
+	err = email.Send(smtpClient)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func SendRentFinishToEmail(info pdfc.ValuesForTable, tariff string) error {
+	moscow, _ := time.LoadLocation("Europe/Moscow")
+	currDateT := time.Now().In(moscow).Format("02.01.2006 15:04:05")
+	var htmlBody = `
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+	<h1>Письмо ` + info.FIO + `.</h1>
+	<p>Сегодня (` + currDateT + ` МСК) вы
+	закончили аренду товар "` + info.NName + `",
+	артикул - ` + info.Article + `.</p>
+	<p>Тариф - ` + tariff + ` за минуту. Ваша скидка Пользователя - ` + strconv.Itoa(info.Dis) + `%</p>
+	<p>Во вложении письмо в формате .pdf.</p>
+	<p>Спасибо, что выбрали нас!<br>
+	С уважением, компания КОТЭ.</p>
+	</body>
+	`
+	server := mail.NewSMTPClient()
+	// SERVER DETAILS
+	server.Host = "smtp.mail.ru"
+	server.Port = 587
+	// HOST EMAIL DITAILS
+	server.Username = "ooo-kote@mail.ru"
+	server.Password = PASSWORD
+	server.Encryption = mail.EncryptionTLS
+
+	smtpClient, err := server.Connect()
+	if err != nil {
+		return err
+	}
+
+	email := mail.NewMSG()
+	email.SetFrom(`ООО "КОТЭ" <ooo-kote@mail.ru>`)
+	email.AddTo(info.UMail)
+	email.SetSubject("Окончание аренды товара.")
 	email.AddAttachment("cheque.pdf")
 	email.SetBody(mail.TextHTML, htmlBody)
 	err = email.Send(smtpClient)

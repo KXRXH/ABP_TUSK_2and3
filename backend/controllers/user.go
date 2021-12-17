@@ -126,3 +126,19 @@ func GetUser(context *fiber.Ctx) error {
 	})
 	return nil
 }
+
+func GetUsersStatistic(context *fiber.Ctx) error {
+	models := &[]db.User{}
+	err := db.DB.Preload("Status").Order("rent_time desc").Find(&models).Error
+	if err != nil {
+		context.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{"message": "could not get models"})
+		return err
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "users gotten successfully",
+		"data":    models,
+	})
+	return nil
+}

@@ -24,6 +24,7 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/user/", controllers.CreateUser)
 	api.App.Put("/api/user/:id", controllers.UpdateUser)
 	api.App.Delete("/api/user/:id", controllers.DeleteUser)
+	api.App.Get("/api/user_stats/", controllers.GetUsersStatistic)
 	// Base
 	api.App.Get("/api/base/", controllers.GetAllBases)
 	api.App.Get("/api/base/:id", controllers.GetBase)
@@ -83,9 +84,11 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/login/", controllers.Login)
 	api.App.Post("/api/user_login/", controllers.UserLogin)
 	// Mailing
-	api.App.Post("/api/cheque", controllers.SendCheque)
+	api.App.Post("/api/finish", controllers.SendFinish)
+	api.App.Post("/api/start", controllers.SendStart)
 	api.App.Get("/api/available_nomenclature", controllers.GetNotUsed)
 	api.App.Post("/api/statistic", controllers.SendAdminStatistic)
+
 }
 
 func (api *ApiInterface) Index(ctx *fiber.Ctx) {
