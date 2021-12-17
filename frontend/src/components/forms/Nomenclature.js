@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import {Button, Form, Row, Card, InputGroup} from 'react-bootstrap'
-import {API_ADDRESS} from '../../constants.js'
+import {API_ADDRESS, getCurrentDate} from '../../constants.js'
 import './forms.css'
-
 
 export class Nomenclature extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: this.props.date,
+            start: getCurrentDate(),
+            finish: getCurrentDate(),
             number: this.props.defaultId,
             code: this.props.code,
             name: this.props.name,
@@ -22,12 +22,19 @@ export class Nomenclature extends Component {
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleNumberChange = this.handleNumberChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        if (this.props.defaultId == -1)
+            this.getId();
     }
     handleNumberChange(event) {this.setState({number: event.target.value})}
-    handleDateChange(event) {this.setState({date: event.target.value})}
+    handleDateChange(event) {this.setState({start: event.target.value})}
     handleCodeChange(event) {this.setState({code: event.target.value})}
     handleNameChange(event) {this.setState({name: event.target.value})}
     handleTypeChange(event) {this.setState({type: event.target.value})}
+    getId() {
+        fetch(API_ADDRESS + "nomenclatureId")
+        .then(res => res.json())
+        .then(result => this.setState({number: result.id + 1}))
+    }
     componentDidMount() {
         fetch(API_ADDRESS + "nomenclature_type").then(result => result.json())
         .then(
@@ -59,6 +66,8 @@ export class Nomenclature extends Component {
                     "name": this.state.name,
                     "used": "1",
                     "in_use": "0",
+                    "start": new Date(this.state.start).toISOString(),
+                    "finish": new Date(this.state.finish).toISOString(),
                     "Type": {
                         "id": this.state.typeId - 0,
                         "title": this.getType(this.state.typeId - 0)
@@ -96,10 +105,19 @@ export class Nomenclature extends Component {
                 <Card.Body>
                         <Row className="mb-3">
                             <InputGroup className="mb-3">
-                                <InputGroup.Text>Дата</InputGroup.Text>
-                                <Form.Control type="date" onChange={this.handleDateChange} value={this.state.date}/>
+                                <InputGroup.Text>Дата Ввода</InputGroup.Text>
+                                <Form.Control type="date" onChange={this.handleDateChange} value={this.state.start}/>
+                                <InputGroup.Text>Дата вывода</InputGroup.Text>
+                                <Form.Control 
+                                    type="date" onChange={e => this.setState({finish: e.target.value})} 
+                                    value={this.state.finish} 
+                                />
+                                                            </InputGroup>
+                        </Row>
+                        <Row>
+                            <InputGroup className="mb-3">
                                 <InputGroup.Text>Номер</InputGroup.Text>
-                                <Form.Control type="text" onChange={this.handleNumberChange} value={this.state.number}/>
+                                <Form.Control type="text" value={this.state.number}/>
                             </InputGroup>
                        </Row>
                         <Row className="mb-3">

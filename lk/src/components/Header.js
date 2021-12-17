@@ -1,15 +1,8 @@
 import React from 'react'
 import { Badge, Container, Navbar, Nav } from 'react-bootstrap'
 import './components.css'
-import { NOMENCLATURE_TAB, MY_TAB } from '../constants.js'
+import { NOMENCLATURE_TAB, MY_TAB, getBG } from '../constants.js'
 
-const HEADER_STYLE = {
-    1: "VIP", 2: "USUAL", 3: "OFTEN", 4: "STANDART", 5: "NEW"
-}
-
-const getBG = status => {
-    return HEADER_STYLE[status]
-}
 
 export default function Header(props) {
     return (

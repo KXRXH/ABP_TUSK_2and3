@@ -65,5 +65,19 @@ const OPERATOR = 3;
 const MASTER = 4;
 
 const NOMENCLATURE = 0;
+
+const getCurrentDate = () => {
+    let d = new Date();
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+    return [year, month, day].join('-');
+}
+
 export {API_ADDRESS, REQUEST_PATH, getDate, ADMIN, MANAGER, OPERATOR, MASTER}
-export {NOMENCLATURE}
+export {NOMENCLATURE, getCurrentDate}

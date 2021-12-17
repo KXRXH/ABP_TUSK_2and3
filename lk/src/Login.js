@@ -12,26 +12,26 @@ export class Login extends Component{
 			login: ""
 		}
 	}
-  handleSubmit(event) {
-			event.preventDefault();
-			fetch(API_ADDRESS + "user_login", {
-					method: "POST", 
-							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify({
-									login: this.state.login,
-							})
-					}).then(response => response.json()).then(
-							result => {
-									// Check success login
-									if (!result.message) {
-											this.props.setUser(null);
-											alert("Ошибка доступа!")
-											return;
-									}
-									this.props.setUser(result.user)
-							},
-							error => {this.props.setUser(null); this.setState({error: true})}
-			)
+	handleSubmit(event) {
+		event.preventDefault();
+		fetch(API_ADDRESS + "user_login", {
+			method: "POST", 
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					login: this.state.login,
+				})
+			}).then(response => response.json()).then(
+				result => {
+					// Check success login
+					if (!result.message) {
+						this.props.setUser(null);
+						alert("Ошибка доступа!")
+						return;
+					}
+					this.props.setUser(result.user)
+				},
+				error => {this.props.setUser(null); this.setState({error: true})}
+		)
 	}
  	render(){
 		return(

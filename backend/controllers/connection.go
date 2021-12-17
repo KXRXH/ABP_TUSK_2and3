@@ -23,6 +23,12 @@ func Login(c *fiber.Ctx) error {
 	}
 	// ПОДТЯГИВАЕМ ЗНАЧЕНИЯ ИЗ 2 positions
 	db.DB.Joins("Position", db.DB.Where("Login = ?", data["login"])).First(&employee)
+	if employee.Position.ID == 4 {
+		c.Status(fiber.StatusForbidden)
+		return c.JSON(fiber.Map{
+			"message": false,
+		})
+	}
 	// ТУТ ФОРМИРОВАНИЕ ИНФОРМАЦИИ О USER'е
 	claim := jwt.MapClaims{
 		"ID":           employee.ID,

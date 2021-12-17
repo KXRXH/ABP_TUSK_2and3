@@ -146,7 +146,7 @@ export class Note extends Component {
             if (this.props.isCreateNom) {
             return <Nomenclature 
                     onSubmit={() => this.props.changeAction(0)}
-                    defaultId={this.props.nomToChangeId} isCreate={true}
+                    defaultId={-1} isCreate={true}
                 />
             }
             return <Nomenclature 
@@ -175,7 +175,7 @@ export class Note extends Component {
             }
         }
         if (this.state.tariffID != -1) {
-            return <Tariff date={Date().toString()} 
+            return <Tariff date={getDate(new Date().toISOString())} 
                     defaultId={this.state.tariffID} 
                     number={this.state.tariffID}
                     title={this.state.tariff.title}

@@ -6,6 +6,7 @@ import Header from './components/Header.js'
 import { Nomenclature } from './components/Nomenclature.js'
 import { NOMENCLATURE_TAB, MY_TAB } from './constants.js'
 import './App.css';
+import { UserData } from './components/UserData';
 
 const API_ADDRESS = "http://localhost:3001/api/"
 const {app} = window.require('electron').remote;
@@ -48,6 +49,8 @@ class App extends Component {
 		if (this.state.currentTab === NOMENCLATURE_TAB) {
 			bdy = <Nomenclature className="Form"/>
 		} else {
+			bdy = <UserData user={this.state.user}
+					/>
 		}
 		return (
 			<div>

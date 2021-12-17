@@ -24,7 +24,7 @@ func CreateReport(values ValuesForTable) error {
 	}
 	var result = strconv.FormatFloat(float64(values.Sum)*(1-(float64(values.Dis)/100)), 'f', 2, 64)
 	pdf := gofpdf.New("L", "mm", "A4", "")
-	pdf.AddUTF8Font("Times", "", "A:\\Projects\\Golang\\ABP_TUSK_2and3-last\\backend\\src\\times_new_roman.ttf")
+	pdf.AddUTF8Font("Times", "", "/src/times_new_roman.ttf")
 	cellWd := (307 - margin*2) / colCount
 	cellHt := pdf.PointToUnitConvert(float64(fontHt + 6))
 
@@ -80,6 +80,71 @@ func CreateReport(values ValuesForTable) error {
 		float64(margin+40)+float64(8)*cellHt, 50, 50, false, "", 0, "")
 
 	if err := pdf.OutputFileAndClose("./temp/cheque.pdf"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateStatistic(values ValuesForStatistic) error {
+	type textTable struct {
+		obj, value string
+	}
+	const (
+		colCount = 2
+		rowCount = 4
+		margin   = 16.0
+		fontHt   = 26.0
+		fontName = "Times"
+	)
+	pdf := gofpdf.New("L", "mm", "A4", "")
+	pdf.AddUTF8Font("Times", "", "/src/times_new_roman.ttf")
+	cellWd := (307 - margin*2) / colCount
+	cellHt := pdf.PointToUnitConvert(float64(fontHt + 6))
+
+	pdf.SetCompression(true)
+	pdf.AddPage()
+	pdf.SetFont(fontName, "", fontHt+4)
+	pdf.CellFormat(0, 0, `Отчет о работе системы аренды`, "0", 0, "TC", false, 0, "")
+
+	pdf.SetFont(fontName, "", fontHt+2)
+	pdf.SetY(30)
+	pdf.CellFormat(0, 0, (`Компания "КОТЭ"`), "0", 0, "TC", false, 0, "")
+
+	pdf.SetFont(fontName, "", fontHt)
+	data := []textTable{
+		{obj: "В системе пользователей", value: strconv.Itoa(values.NumOfUsers)},
+		{obj: "Количество товаров", value: strconv.Itoa(values.NumOfProducts)},
+		{obj: "Количество товаров в эксплуатации", value: strconv.Itoa(values.NumOfUsedProducts)},
+		{obj: "Среднее время аренды", value: strconv.FormatFloat(values.AvgRentT, 'f', 2, 64)},
+	}
+	for rowJ := 0; rowJ < rowCount; rowJ++ {
+		for colJ := 0; colJ < colCount; colJ++ {
+			pdf.SetXY(float64(margin-5)+float64(colJ)*float64(cellWd), float64(margin+35)+float64(rowJ)*cellHt)
+			pdf.SetFont(fontName, "", fontHt-3)
+			if colJ == 0 {
+				pdf.CellFormat(float64(cellWd), cellHt, (data[rowJ].obj), "1", 0, "LM", false, 0, "")
+			} else {
+				pdf.CellFormat(float64(cellWd), cellHt, (data[rowJ].value), "1", 0, "RM", false, 0, "")
+			}
+		}
+	}
+
+	// ТЕКСТ
+	pdf.SetXY(float64(margin-5)+float64(0)*float64(cellWd), float64(margin+20)+float64(9)*cellHt)
+	pdf.SetFont(fontName, "", fontHt-3)
+	// КАРТИНКА
+	pdf.CellFormat(float64(cellWd), cellHt, ("Подпись Администратора"), "0", 0, "BL", false, 0, "")
+	pdf.Image("./src/admin.png", float64(margin+10)+float64(1)*float64(cellWd),
+		float64(margin+20)+float64(9)*cellHt, 0, 0, false, "", 0, "")
+	// ТЕКСТ
+	pdf.SetXY(float64(margin-5)+float64(0)*float64(cellWd), float64(margin+20)+float64(10)*cellHt)
+	pdf.SetFont(fontName, "", fontHt-3)
+	pdf.CellFormat(float64(cellWd), cellHt, ("Печать"), "0", 0, "BL", false, 0, "")
+	// КАРТИНКА
+	pdf.Image("./src/Печать.png", float64(margin+15)+float64(1.5)*float64(cellWd),
+		float64(margin+15)+float64(8)*cellHt, 50, 50, false, "", 0, "")
+
+	if err := pdf.OutputFileAndClose("statistic.pdf"); err != nil {
 		return err
 	}
 	return nil

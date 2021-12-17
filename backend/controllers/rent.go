@@ -16,9 +16,37 @@ func CreateRent(ctx *fiber.Ctx) error {
 		)
 		return err
 	}
+	if !model.IsStart {
+		modelf := db.Rent{}
+		err = db.DB.Preload("User").Preload("Base").Preload("Product").Where("is_start = ? AND user_id = ? AND product_id = ?", true, model.UserId, model.ProductId).Last(&modelf).Error
+		if err != nil {
+			ctx.Status(http.StatusBadRequest).JSON(
+				&fiber.Map{"message": "could not get finish rent"},
+			)
+			return err
+		}
+
+		v_model := db.User{}
+		err := db.DB.Preload("Status").Where("id = ?", model.UserId).First(&v_model).Error
+		if err != nil {
+			ctx.Status(http.StatusBadRequest).JSON(
+				&fiber.Map{"message": "could not get user"})
+			return err
+		}
+
+		dif := model.Time.Sub(modelf.Time).Minutes()
+
+		umodel := db.User{RentTime: (int(dif) + v_model.RentTime), RentCount: v_model.RentCount + 1}
+		err = db.DB.Model(&umodel).Where("id = ?", model.UserId).Updates(&umodel).Error
+		if err != nil {
+			ctx.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"message": "could not update user",
+			})
+			return err
+		}
+	}
 
 	err = db.DB.Create(&model).Error
-
 	if err != nil {
 		ctx.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message": "could not create Rent"},

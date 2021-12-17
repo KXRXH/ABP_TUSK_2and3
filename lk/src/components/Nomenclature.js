@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Table} from "react-bootstrap"
+import {Table, Card} from "react-bootstrap"
 import './components.css'
 import { API_ADDRESS } from '../constants.js'
 
@@ -17,19 +17,21 @@ export class Nomenclature extends Component {
     }
     render() {
         return (
-            <div className="Card">
-                <Table striped bordered hover className="mb-3">
-                    <thead>
-                        <th>Наименование</th>
-                        <th>Тип</th>
-                    </thead>
-                    <tbody>{this.state.data.map(row => <tr onClick={() => alert(row.id)}>
-                        <td>{row.name}</td>
-                        <td>{row.Type.title}</td>
-                    </tr>)}</tbody>
+            <Card className="Card" border="dark">
+                <Card.Body>
+                    <Table striped bordered hover className="mb-3">
+                        <thead>
+                            <th>Наименование</th>
+                            <th>Тип</th>
+                        </thead>
+                        <tbody>{this.state.data.map(row => <tr onClick={() => alert(row.id)}>
+                            <td>{row.name}</td>
+                            <td>{row.Type.title}</td>
+                        </tr>)}</tbody>
 
-                </Table>
-            </div>
+                    </Table>
+                </Card.Body>
+           </Card>
         )
     }
 }
