@@ -24,7 +24,7 @@ func (api *ApiInterface) InitApp() {
 	api.App.Post("/api/user/", controllers.CreateUser)
 	api.App.Put("/api/user/:id", controllers.UpdateUser)
 	api.App.Delete("/api/user/:id", controllers.DeleteUser)
-	api.App.Get("/api/user_stats/", controllers.GetUsersStatistic)
+	api.App.Get("/api/user_stats/:email", controllers.GetUsersStatistic)
 	// Base
 	api.App.Get("/api/base/", controllers.GetAllBases)
 	api.App.Get("/api/base/:id", controllers.GetBase)

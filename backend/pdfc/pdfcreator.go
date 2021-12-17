@@ -1,6 +1,7 @@
 package pdfc
 
 import (
+	"dblib/db"
 	"fmt"
 	"strconv"
 
@@ -148,4 +149,71 @@ func CreateStatistic(values ValuesForStatistic) error {
 		return err
 	}
 	return nil
+}
+
+func CreateUserStats(values []db.User) error {
+	type textTable struct {
+		Id, Count, rentTime string
+	}
+	var data []textTable
+	rowCount := len(values)
+	const (
+		colCount = 3
+		margin   = 16.0
+		fontHt   = 29.0
+		sMail    = "ooo-kote@mail.ru"
+		fontName = "Times"
+	)
+	pdf := gofpdf.New("L", "mm", "A4", "")
+	pdf.AddUTF8Font("Times", "", "/src/times_new_roman.ttf")
+	cellWd := (307 - margin*2) / colCount
+	cellHt := pdf.PointToUnitConvert(float64(fontHt + 6))
+
+	pdf.SetCompression(true)
+	pdf.AddPage()
+	pdf.SetFont(fontName, "", fontHt-3)
+	pdf.CellFormat(0, 0, "Статистика по пользователям.", "0", 0, "TC", false, 0, "")
+	pdf.SetFont(fontName, "", fontHt-5)
+	data = append(data, textTable{
+		Id:       "Пользователь (id)",
+		Count:    "Кол-во",
+		rentTime: "Время (минуты)",
+	})
+	var rt string
+	for _, j := range values {
+		if j.RentCount == 0 {
+			rt = strconv.Itoa(j.RentTime)
+		} else {
+			rt = strconv.Itoa(j.RentTime / j.RentCount)
+		}
+		data = append(data, textTable{
+			Id:       strconv.Itoa(j.ID),
+			Count:    strconv.Itoa(j.RentCount),
+			rentTime: rt,
+		})
+	}
+	for rowJ := 0; rowJ < rowCount+1; rowJ++ {
+		for colJ := 0; colJ < colCount; colJ++ {
+			pdf.SetXY(float64(margin-5)+float64(colJ)*float64(cellWd), float64(margin+35)+float64(rowJ)*cellHt)
+			if rowJ == 0 {
+				pdf.SetFont(fontName, "", fontHt-4)
+			} else {
+				pdf.SetFont(fontName, "", fontHt-6)
+			}
+			switch colJ {
+			case 0:
+				pdf.CellFormat(float64(cellWd), cellHt, (data[rowJ].Id), "1", 0, "LM", false, 0, "")
+			case 1:
+				pdf.CellFormat(float64(cellWd), cellHt, (data[rowJ].Count), "1", 0, "LM", false, 0, "")
+			case 2:
+				pdf.CellFormat(float64(cellWd), cellHt, (data[rowJ].rentTime), "1", 0, "LM", false, 0, "")
+
+			}
+		}
+	}
+	if err := pdf.OutputFileAndClose("user_stats.pdf"); err != nil {
+		return err
+	}
+	return nil
+
 }
