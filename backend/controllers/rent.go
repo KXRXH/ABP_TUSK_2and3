@@ -18,6 +18,7 @@ func CreateRent(ctx *fiber.Ctx) error {
 		)
 		return err
 	}
+	dif := 0.0
 	nulltime := time.Time{}
 	if model.Time == nulltime {
 		moscow, _ := time.LoadLocation("Europe/Moscow")
@@ -50,7 +51,7 @@ func CreateRent(ctx *fiber.Ctx) error {
 			return err
 		}
 		// COUNTING LEN` OF LAST RENT
-		dif := model.Time.Sub(modelf.Time).Minutes()
+		dif = model.Time.Sub(modelf.Time).Minutes()
 		// ADDING MINUTES TO USER STATS
 		timeOFRent := dif + float64(v_model.RentTime)
 		fmt.Println(dif)
@@ -107,7 +108,6 @@ func CreateRent(ctx *fiber.Ctx) error {
 			})
 			return err
 		}
-
 	}
 
 	err = db.DB.Create(&model).Error
@@ -116,6 +116,16 @@ func CreateRent(ctx *fiber.Ctx) error {
 			&fiber.Map{"message": "could not create Rent"},
 		)
 		return err
+	}
+	if !model.IsStart {
+		ctx.Status(http.StatusOK).JSON(&fiber.Map{
+			"message":  "rent was finnished",
+			"duration": dif,
+		})
+	} else {
+		ctx.Status(http.StatusOK).JSON(&fiber.Map{
+			"message": "rent was started",
+		})
 	}
 	return nil
 }

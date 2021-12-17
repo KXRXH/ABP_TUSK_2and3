@@ -8,6 +8,7 @@ type ValuesForTable struct {
 	UMail   string `json:"mail"`
 	FIO     string `json:"name"`
 	Sum     int    `json:"sum"`
+	Duraion int    `json:"duration"`
 	Dis     int    `json:"discount"`
 }
 

@@ -23,6 +23,7 @@ func SendStart(c *fiber.Ctx) error {
 		})
 		return err
 	}
+
 	var model db.Nomenclature
 	if err := db.DB.Model(&model).Preload("Type").Where("Article = ?", values.Article).First(&model).Error; err != nil {
 		c.Status(http.StatusBadRequest).JSON(&fiber.Map{
@@ -30,7 +31,6 @@ func SendStart(c *fiber.Ctx) error {
 		})
 		return err
 	}
-	fmt.Println(model)
 	tariff := strconv.Itoa(model.Type.Price)
 	err = pdfc.CreateReport(values)
 	if err != nil {
@@ -62,8 +62,10 @@ func SendFinish(c *fiber.Ctx) error {
 		})
 		return err
 	}
-	fmt.Println(model)
 	tariff := strconv.Itoa(model.Type.Price)
+	values.Sum = model.Type.Price * values.Duraion
+	moscow, _ := time.LoadLocation("Europe/Moscow")
+	values.Date = time.Now().In(moscow).Format("02.01.2006 15:04:05")
 	err = pdfc.CreateReport(values)
 	if err != nil {
 		c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "could not create report"})
