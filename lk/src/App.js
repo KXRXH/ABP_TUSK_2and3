@@ -47,9 +47,17 @@ class App extends Component {
 		}
 		let bdy;
 		if (this.state.currentTab === NOMENCLATURE_TAB) {
-			bdy = <Nomenclature className="Form" tabIndex={this.state.currentTab} userId={this.state.user.id} />
+			bdy = <Nomenclature 
+					className="Form" tabIndex={this.state.currentTab} 
+					userId={this.state.user.id} 
+					user={this.state.user}
+				/>
 		} else if (this.state.currentTab === MY_TAB) {
-			bdy = <Nomenclature className="Form" tabIndex={this.state.currentTab} userId={this.state.user.id} />
+			bdy = <Nomenclature 
+					className="Form" tabIndex={this.state.currentTab} 
+					userId={this.state.user.id} 
+					user={this.state.user}
+				/>
 		} else {
 			bdy = <UserData user={this.state.user}
 					/>

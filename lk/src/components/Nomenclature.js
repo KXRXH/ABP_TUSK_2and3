@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Table, Card} from "react-bootstrap"
+import {Table, Card, ThemeProvider} from "react-bootstrap"
 import './components.css'
 import { API_ADDRESS, NOMENCLATURE_TAB, MY_TAB} from '../constants.js'
 
@@ -7,7 +7,9 @@ export class Nomenclature extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            duration: 0,
+            currentProduct: null,
         }
         console.log(this.props.userId)
         this.update();
@@ -24,6 +26,40 @@ export class Nomenclature extends Component {
             .then(res => res.json())
             .then(result => this.setState({data: result.data}), e => {console.log(e)})
         }
+    }
+    sendStartMail(product) {
+        console.log(product)
+        fetch(API_ADDRESS + "start", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "nomenclature": product.name,
+                "code": product.code,
+                "number": product.id + "",
+                "mail": this.props.user.mail,
+                "name": this.props.user.surname +" "+ this.props.user.name +" "+ this.props.user.lastname,
+                "discount": this.props.user.Status.discount
+            })
+        })
+    }
+    sendFinishMail(product) {
+        fetch(API_ADDRESS + "finish", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "nomenclature": product.name,
+                "code": product.code,
+                "number": product.id + "",
+                "mail": this.props.user.mail,
+                "name": this.props.user.surname +" "+ this.props.user.name +" "+ this.props.user.lastname,
+                "duration": Math.floor(this.state.duration),
+                "discount": this.props.user.Status.discount
+            })
+        })
     }
     handleClick(product) {
         if (this.props.tabIndex === NOMENCLATURE_TAB) {
@@ -42,8 +78,11 @@ export class Nomenclature extends Component {
                     "is_start": true,
                 })
             })
+            this.sendStartMail(product);
         } else {
-            window.confirm("Вернуть товар?")
+            if (!window.confirm("Вернуть товар?")) {
+                return
+            }
             fetch(API_ADDRESS + "rent", {
                 method: "POST",
                 headers: {
@@ -55,10 +94,28 @@ export class Nomenclature extends Component {
                     "BaseId": 1,
                     "is_start": false,
                 })
-            })
+            }).then(res => res.json())
+            .then(result => {
+                this.setState({
+                    duration: result.duration + 1, 
+                    currentProduct: product,
+                });
+                console.log(product)
+                this.sendFinishMail(product);
+            },
+                e => console.log(e)
+            )
         }
     }
     render() {
+        /*
+        if (this.state.duration !== 0) {
+            this.sendFinishMail(this.state.currentProduct);
+            this.setState({
+                currentProduct: null, 
+                duration: 0,
+            })
+        } */
         return (
             <Card className="Card" border="dark">
                 <Card.Body>
