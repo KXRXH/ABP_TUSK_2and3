@@ -134,7 +134,7 @@ export class Nomenclature extends Component {
                         <Row className="mb-3">
                             <InputGroup>
                                 <InputGroup.Text>Тип товара</InputGroup.Text>
-                                <Form.Control as="select" onChange={e => this.setState({typeId: e.target.value})}>
+                                <Form.Control as="select" value={1} selected onChange={e => this.setState({typeId: e.target.value})}>
                                 {this.state.types.map(value => {
                                     return <option value={value.id}>{value.title}</option>
                                 })}

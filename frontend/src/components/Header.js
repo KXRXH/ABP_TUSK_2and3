@@ -20,7 +20,7 @@ const Header = props => {
 					<NavDropdown.Item onClick={() => props.callNote(2)}>Пользователи</NavDropdown.Item>
 					<NavDropdown.Item onClick={() => props.callNote(3)}>Станции Аренды</NavDropdown.Item>
 					{props.position === 1 ? 
-						<NavDropdown.Item onClick={() => props.callNote(8)}>Параметры рассылки</NavDropdown.Item> : null
+						<NavDropdown.Item onClick={() => props.callNote(8)}>Статистика</NavDropdown.Item> : null
 					}
 				</NavDropdown>
 				{props.position < 2 ? <NavDropdown title="Эксплуатация товаров" id="navbarScrollingDropdown">

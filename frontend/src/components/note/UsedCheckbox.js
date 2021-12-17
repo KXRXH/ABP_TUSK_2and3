@@ -6,7 +6,7 @@ export class UsedCheckbox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.value == 1
+            value: this.props.value == "1"
         }
         this.handleChange = this.handleChange.bind(this);
     }

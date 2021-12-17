@@ -97,7 +97,7 @@ export class Nomenclature extends Component {
             }).then(res => res.json())
             .then(result => {
                 this.setState({
-                    duration: result.duration + 1, 
+                    duration: result.duration, 
                     currentProduct: product,
                 });
                 console.log(product)

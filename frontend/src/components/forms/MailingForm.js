@@ -11,8 +11,9 @@ export class MailingForm extends Component{
 			mailing: this.props.employee.Mailing == 1,
 			email: this.props.employee.Mail,
 		}
-		this.changeMailing = this.changeMailing.bind(this);
 		this.changeEmail = this.changeEmail.bind(this);
+		this.submit = this.submit.bind(this);
+		this.sendStatistic = this.sendStatistic.bind(this);
 	}
 	changeEmail(mail) {
 		fetch(API_ADDRESS + "employee/" + this.props.employee.ID, {
@@ -28,22 +29,20 @@ export class MailingForm extends Component{
 			email: mail,
 		})
 	}
-	changeMailing() {
-		fetch(API_ADDRESS + "employee/" + this.props.employee.ID, {
-			method: "PUT",
+	submit(event) {
+		event.preventDefault();
+		fetch(API_ADDRESS + "statistic", {
+			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
-			}, 
+			},
 			body: JSON.stringify({
-				"mailing": this.state.mailing ? "0" : "1" // Здесь надо инвертировать, все ок
+				"email": this.state.email,
 			})
 		})
-		.then(r => r.json())
-		.then(r=> console.log(r), e => {console.log(e)})
-		this.setState({
-			mailing: !this.state.mailing
-		})
-
+	}
+	sendStatistic() {
+		fetch(API_ADDRESS + "user_stats/" + this.state.email)
 	}
 	render() {
 		return (
@@ -61,17 +60,9 @@ export class MailingForm extends Component{
 					/>
 				</Form.Group>
 
-				<Form.Group className="mb-3 mailing">
-					<InputGroup>
-						<InputGroup.Text>Рассылка</InputGroup.Text>
-						<InputGroup.Text>
-						<Form.Check type="checkbox" checked={this.state.mailing}
-							onChange={this.changeMailing}
-						/>
-						</InputGroup.Text>
-					</InputGroup>
-				</Form.Group>
                 </Card.Body>
+				<Button onClick={this.sendStatistic}>Отчет по пользователям</Button>
+				<Button onClick={this.submit}>Отчет о работе системе</Button>
 			</Form>
 		</Card>
         )
