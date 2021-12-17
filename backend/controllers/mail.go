@@ -155,7 +155,7 @@ func SendChequeToEmail(info pdfc.ValuesForTable, tariff string) error {
 	взяли в аренду товар "` + info.NName + `",
 	артикул - ` + info.Article + `.</p>
 	<p>Тариф - ` + tariff + ` за минуту. Ваша скидка Пользователя - ` + strconv.Itoa(info.Dis) + `%</p>
-	<p>Приятного использования!
+	<p>Приятного использования!<br>
 	С уважением, компания КОТЭ.</p>
 	</body>
 	`
