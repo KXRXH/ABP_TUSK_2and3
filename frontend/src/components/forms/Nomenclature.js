@@ -14,7 +14,7 @@ export class Nomenclature extends Component {
             name: this.props.name,
             type: "0",
             types: [],
-            typeId: 0,
+            typeId: 1,
         }
         this.handleCodeChange = this.handleCodeChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -55,8 +55,12 @@ export class Nomenclature extends Component {
         return ""
     }
     onSubmit() {
+        let typeID = this.state.typeId;
+        if (typeID == 0) {
+            typeID++;
+        }
         if (this.props.isCreate) {
-            fetch(API_ADDRESS + "nomenclature", {
+           fetch(API_ADDRESS + "nomenclature", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -68,14 +72,10 @@ export class Nomenclature extends Component {
                     "in_use": "0",
                     "start": new Date(this.state.start).toISOString(),
                     "finish": new Date(this.state.finish).toISOString(),
-                    "Type": {
-                        "id": this.state.typeId - 0,
-                        "title": this.getType(this.state.typeId - 0)
-                    }
+                    "TypeId": typeID - 0,
                 })
             }).then(res => res.json()).then(r => console.log(r), e => console.log(e))
         } else {
-            console.log("Number = ", this.state.number);
             fetch(API_ADDRESS + "nomenclature/" + "" + this.state.number, {
                 method: "PUT",
                 headers: {
@@ -84,12 +84,8 @@ export class Nomenclature extends Component {
                 body: JSON.stringify({
                     "code": this.state.code,
                     "name": this.state.name,
-                    "used": true,
-                    /*"Type": {
-                        "id": this.state.typeId -0,
-                        "title": this.getType(this.state.typeId - 0)
-                    } */
-
+                    "used": "1",
+                    "TypeId": typeID - 0,
                 })
             }).then(res => res.json()).then(r => console.log(r), e => console.log(e));
         }
@@ -134,7 +130,7 @@ export class Nomenclature extends Component {
                         <Row className="mb-3">
                             <InputGroup>
                                 <InputGroup.Text>Тип товара</InputGroup.Text>
-                                <Form.Control as="select" value={1} selected onChange={e => this.setState({typeId: e.target.value})}>
+                                <Form.Control as="select" onChange={e => this.setState({typeId: e.target.value})}>
                                 {this.state.types.map(value => {
                                     return <option value={value.id}>{value.title}</option>
                                 })}

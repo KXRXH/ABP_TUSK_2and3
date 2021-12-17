@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, InputGroup, Card } from 'react-bootstrap'
+import { Button, Form, InputGroup, Card, Row, ButtonGroup } from 'react-bootstrap'
 import './forms.css'
 
 const API_ADDRESS = "http://localhost:3001/api/"
@@ -61,9 +61,12 @@ export class MailingForm extends Component{
 				</Form.Group>
 
                 </Card.Body>
-				<Button onClick={this.sendStatistic}>Отчет по пользователям</Button>
-				<Button onClick={this.submit}>Отчет о работе системе</Button>
-			</Form>
+				<ButtonGroup className="btn">
+						<Button onClick={this.sendStatistic}>Отчет по пользователям</Button>
+						<Button onClick={this.submit}>Отчет о работе системы</Button>
+	
+				</ButtonGroup>
+	</Form>
 		</Card>
         )
 	}

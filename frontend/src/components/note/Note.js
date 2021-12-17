@@ -44,7 +44,7 @@ export class Note extends Component {
                     : null
                 }
                 {this.props.position === ADMIN ? 
-                    <td><Button onClick={() => (window.confirm('Delete the item?')) ? this.props.deleteNomenclature(row.id) 
+                    <td><Button onClick={() => (window.confirm('Удалить?')) ? this.props.deleteNomenclature(row.id) 
                     : null}>Удалить</Button></td> 
                     : null
                 }
